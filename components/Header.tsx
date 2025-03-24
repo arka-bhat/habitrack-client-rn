@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, Pressable, Platform } from "react-native";
+import { View, Pressable, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useColorScheme } from "nativewind";
 
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { backgroundColors } from "@/constants/TailwindClassNameConstants";
+import useColorMode from "@/hooks/useColorMode";
 
 interface HeaderProps {
     children: React.ReactNode;
@@ -23,8 +23,7 @@ const Header: React.FC<HeaderProps> = ({
     iconSize,
     onIconPress,
 }) => {
-    const { colorScheme } = useColorScheme();
-    const colorMode = colorScheme === "dark" ? "dark" : "light";
+    const { colorMode } = useColorMode();
 
     return (
         <View

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, Text, Pressable, StatusBar, View, Alert } from "react-native";
+import { TextInput, Text, Pressable, StatusBar, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import {
@@ -7,11 +7,9 @@ import {
     KeyboardProvider,
     KeyboardToolbar,
 } from "react-native-keyboard-controller";
-// import DateTimePicker from "@react-native-community/datetimepicker";
 
 import Header from "@components/Header";
 import { ImagePickerMultiple } from "@components/ImagePicker";
-import DropdownPicker from "@/components/DropdownPicker";
 import DateTimePicker from "@components/DateTimePicker";
 import {
     backgroundColors,
@@ -20,8 +18,8 @@ import {
     textColors,
 } from "@constants/TailwindClassNameConstants";
 import { colors, mergeClassNames } from "@utils/TailwindUtils";
-import { useColorScheme } from "nativewind";
 import Dropdown from "@/components/CustomDropdown";
+import useColorMode from "@/hooks/useColorMode";
 
 // Define the type for the asset form data
 type AssetFormData = {
@@ -41,8 +39,7 @@ type AssetFormData = {
 };
 
 const AssetForm = () => {
-    const { colorScheme } = useColorScheme();
-    const colorMode = colorScheme === "dark" ? "dark" : "light";
+    const { colorMode } = useColorMode();
 
     const [formData, setFormData] = useState<AssetFormData>({
         name: "",
@@ -118,7 +115,7 @@ const AssetForm = () => {
                                 textColors,
                                 placeholderColors
                             )}
-                            placeholderTextColor={colors[colorMode].secondary[600]}
+                            placeholderTextColor={colors["light"].secondary[600]}
                         />
                     </View>
 
@@ -141,7 +138,7 @@ const AssetForm = () => {
                                 textColors,
                                 placeholderColors
                             )}
-                            placeholderTextColor={colors[colorMode].secondary[600]}
+                            placeholderTextColor={colors["light"].secondary[600]}
                         />
                     </View>
 
@@ -164,7 +161,7 @@ const AssetForm = () => {
                                 textColors,
                                 placeholderColors
                             )}
-                            placeholderTextColor={colors[colorMode].secondary[600]}
+                            placeholderTextColor={colors["light"].secondary[600]}
                         />
                     </View>
 
@@ -187,7 +184,7 @@ const AssetForm = () => {
                                 textColors,
                                 placeholderColors
                             )}
-                            placeholderTextColor={colors[colorMode].secondary[600]}
+                            placeholderTextColor={colors["light"].secondary[600]}
                         />
                     </View>
 
@@ -210,7 +207,7 @@ const AssetForm = () => {
                                 textColors,
                                 placeholderColors
                             )}
-                            placeholderTextColor={colors[colorMode].secondary[600]}
+                            placeholderTextColor={colors["light"].secondary[600]}
                         />
                     </View>
 
@@ -227,6 +224,7 @@ const AssetForm = () => {
 
                         <Dropdown
                             insideScrollView={true}
+                            minHeight={165}
                             options={[
                                 { label: "Option 1", value: "1" },
                                 { label: "Option 2", value: "2" },
@@ -235,22 +233,28 @@ const AssetForm = () => {
                                 { label: "Option 5", value: "5" },
                                 { label: "Option 6", value: "6" },
                             ]}
-                            onSelect={(value) => Alert.alert("Selected:", value)}
-                            closeOnSelect={false}
+                            onSelect={(value) => handleInputChange("category", value)}
+                            closeOnSelect={true}
                             containerClassName={mergeClassNames("h-12", placeholderColors)}
+                            placeholderClassName='border rounded'
+                            arrowColor={colors[colorMode].secondary[600]}
                             placeholderTextClassName={mergeClassNames(
-                                "font-base-semibold text-base opacity-[0.54]",
-                                placeholderTextColors
+                                "font-base-semibold text-base text-light-secondary-600"
+                                // placeholderTextColors
                             )}
                             labelClassName={mergeClassNames(
                                 "font-base-semibold text-base",
-                                placeholderTextColors
+                                textColors
                             )}
                             dropdownContainerClassName={mergeClassNames(
-                                "border rounded mt-1",
+                                "w-full border rounded mt-1",
                                 placeholderColors
                             )}
-                            backdropClassName='bg-light-secondary-200'
+                            optionClassName={mergeClassNames(
+                                "font-base-semibold text-base",
+                                textColors
+                            )}
+                            backdropClassName='bg-light-secondary-500/20'
                         />
                     </View>
 
@@ -273,7 +277,7 @@ const AssetForm = () => {
                                 textColors,
                                 placeholderColors
                             )}
-                            placeholderTextColor={colors[colorMode].secondary[600]}
+                            placeholderTextColor={colors["light"].secondary[600]}
                         />
                     </View>
 
@@ -334,7 +338,7 @@ const AssetForm = () => {
                                 textColors,
                                 placeholderColors
                             )}
-                            placeholderTextColor={colors[colorMode].secondary[600]}
+                            placeholderTextColor={colors["light"].secondary[600]}
                         />
                     </View>
 
@@ -376,7 +380,7 @@ const AssetForm = () => {
                                 textColors,
                                 placeholderColors
                             )}
-                            placeholderTextColor={colors[colorMode].secondary[600]}
+                            placeholderTextColor={colors["light"].secondary[600]}
                         />
                     </View>
 

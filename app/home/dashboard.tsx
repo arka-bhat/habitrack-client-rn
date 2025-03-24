@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Text, View, Image, Pressable, StatusBar, ScrollView } from "react-native";
+import { Text, View, Image, Pressable, StatusBar, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, {
     useSharedValue,
@@ -10,9 +10,16 @@ import Animated, {
 import { router } from "expo-router";
 
 import Header from "@/components/Header";
+import Dropdown from "@/components/CustomDropdown";
 import ExpandableSection from "@/components/ExpandableSection";
-import { mergeClassNames } from "@/utils/TailwindUtils";
-import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
+import { colors, mergeClassNames } from "@/utils/TailwindUtils";
+import {
+    backgroundColors,
+    placeholderTextColors,
+    textColors,
+} from "@/constants/TailwindClassNameConstants";
+import { Ionicons } from "@expo/vector-icons";
+import useColorMode from "@/hooks/useColorMode";
 
 const NoContent = () => {
     const fadeAnim = useSharedValue(0);
@@ -123,6 +130,8 @@ const DashboardContent = () => {
 };
 
 const Dashboard = () => {
+    const { colorMode } = useColorMode();
+
     const content = [];
     return (
         <SafeAreaView className={mergeClassNames("flex flex-1", backgroundColors)}>
@@ -134,9 +143,54 @@ const Dashboard = () => {
                     onIconPress={() => console.log("icon press")}
                     iconSize={24}
                 >
-                    <Text className={mergeClassNames("text-xl font-base-semibold", textColors)}>
+                    {/* <Text className={mergeClassNames("text-xl font-base-semibold", textColors)}>
                         Dashboard
-                    </Text>
+                    </Text> */}
+                    <Dropdown
+                        centeredDropdown={true}
+                        insideScrollView={false}
+                        minHeight={130}
+                        dropdownWidth='60%'
+                        options={[
+                            { label: "Option 1", value: "1" },
+                            { label: "Option 2", value: "2" },
+                        ]}
+                        onSelect={(value) => Alert.alert(`Selected option: ${value}`)}
+                        closeOnSelect={true}
+                        containerClassName={mergeClassNames("h-15 w-52", backgroundColors)}
+                        placeholderClassName='bg-transparent'
+                        placeholderTextClassName={mergeClassNames(
+                            "font-base-semibold text-base",
+                            textColors
+                        )}
+                        labelClassName={mergeClassNames("font-base-semibold text-base", textColors)}
+                        dropdownContainerClassName={mergeClassNames(
+                            "rounded-lg mt-1 shadow-sm",
+                            backgroundColors
+                        )}
+                        optionClassName={mergeClassNames(
+                            "font-base-semibold text-base",
+                            textColors
+                        )}
+                        backdropClassName='bg-light-secondary-200/30 rounded-lg'
+                        lastElement={
+                            <Pressable
+                                className={mergeClassNames(
+                                    "flex-row h-20 mx-3 py-4 justify-between border-t-hairline dark:border-light-secondary-200",
+                                    backgroundColors
+                                )}
+                                onPress={() => Alert.alert("Add new property")}
+                            >
+                                <Text
+                                    className={mergeClassNames("font-base-medium", textColors)}
+                                    numberOfLines={1}
+                                >
+                                    Add a new property
+                                </Text>
+                                <Ionicons name='add' size={20} color={colors[colorMode].fg} />
+                            </Pressable>
+                        }
+                    />
                 </Header>
             </View>
             {/* Content */}

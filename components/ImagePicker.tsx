@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, Pressable, Image, FlatList } from "react-native";
-import { useColorScheme } from "nativewind";
 import * as ExpoImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { textColors } from "@/constants/TailwindClassNameConstants";
+import useColorMode from "@/hooks/useColorMode";
 
 interface ImagePickerProps {
     children: React.ReactNode;
@@ -46,8 +46,7 @@ export const ImagePickerMultiple: React.FC<ImagePickerMultipleProps> = ({
     images,
     onImageSelect,
 }) => {
-    const { colorScheme } = useColorScheme();
-    const colorMode = colorScheme === "dark" ? "dark" : "light";
+    const { colorMode } = useColorMode();
 
     const pickImage = async () => {
         let result = await ExpoImagePicker.launchImageLibraryAsync({

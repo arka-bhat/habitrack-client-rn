@@ -1,6 +1,8 @@
-/** @type {import('tailwindcss').Config} */
+// /** @type {import('tailwindcss').Config} */
+import { Config } from "tailwindcss/types/config";
 
-module.exports = {
+/** @type {Config} */
+const config: Config = {
     content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
     presets: [require("nativewind/preset")],
     darkMode: "class",
@@ -114,6 +116,11 @@ module.exports = {
                 "base-regular": ["SpaceGrotesk-Regular"],
                 "base-semibold": ["SpaceGrotesk-SemiBold"],
             },
+            opacity: {
+                base: "0.54",
+            },
         },
     },
 };
+
+export default config;

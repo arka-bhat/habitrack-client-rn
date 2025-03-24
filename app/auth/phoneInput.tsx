@@ -12,7 +12,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView, KeyboardProvider } from "react-native-keyboard-controller";
 import { router } from "expo-router";
-import { useColorScheme } from "nativewind";
 import {
     AsYouType,
     parsePhoneNumberFromString,
@@ -25,12 +24,12 @@ import { colors, mergeClassNames } from "@utils/TailwindUtils";
 import { backgroundColors, textColors } from "@constants/TailwindClassNameConstants";
 import CountryCodePicker from "@components/CountryCodePicker";
 import I18nText from "@components/i18nText";
+import useColorMode from "@/hooks/useColorMode";
 
 const PhoneNumberScreen = () => {
     const inputRef = useRef(null);
 
-    const { colorScheme } = useColorScheme();
-    const colorMode = colorScheme === "dark" ? "dark" : "light";
+    const { colorMode } = useColorMode();
 
     const [countryCode, setCountryCode] = useState("+91");
     const [countryCodeISO, setCountryCodeISO] = useState<CountryCode>("IN");

@@ -5,6 +5,7 @@ const environment = process.env.NODE_ENV || "development";
 const config: ExpoConfig = {
     name: environment === "production" ? "HabiTrack" : "HabiTrack (Dev)",
     slug: "habitrack",
+    scheme: "habitrack",
     version: "1.0.0",
     orientation: "portrait",
     userInterfaceStyle: "automatic",

@@ -1,11 +1,11 @@
 import { Text, StatusBar, View, ScrollView, Image, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useColorScheme } from "nativewind";
 
 import Header from "@components/Header";
 import SettingsCategory, { SettingsOptionItem } from "@components/Settings";
 import { backgroundColors, textColors } from "@constants/TailwindClassNameConstants";
 import { colors, mergeClassNames } from "@utils/TailwindUtils";
+import useColorMode from "@/hooks/useColorMode";
 
 interface MenuCategory {
     title: string;
@@ -43,8 +43,7 @@ const ProfileCard = ({ user }: { user?: any }) => {
 };
 
 const Profile = () => {
-    const { colorScheme } = useColorScheme();
-    const colorMode = colorScheme === "dark" ? "dark" : "light";
+    const { colorMode } = useColorMode();
 
     const menuData: MenuCategory[] = [
         {

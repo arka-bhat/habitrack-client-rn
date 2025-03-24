@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, Text, TouchableWithoutFeedback } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
-import { useColorScheme } from "nativewind";
 
 import CollapsableContainer from "./CollapsibleContainer";
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { textColors } from "@/constants/TailwindClassNameConstants";
+import useColorMode from "@/hooks/useColorMode";
 
 interface ExpandableSectionProps {
     title: string;
@@ -19,8 +19,7 @@ const ExpandableSection: React.FC<ExpandableSectionProps> = ({
     titleTextClassName,
     children,
 }) => {
-    const { colorScheme } = useColorScheme();
-    const colorMode = colorScheme === "dark" ? "dark" : "light";
+    const { colorMode } = useColorMode();
 
     const [expanded, setExpanded] = useState(false);
     const arrowRotation = useSharedValue(0);
