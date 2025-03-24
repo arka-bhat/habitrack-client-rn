@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import * as Font from "expo-font";
-import { Text, TouchableOpacity, ActivityIndicator, StatusBar } from "react-native";
+import { Text, Pressable, ActivityIndicator, StatusBar } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -102,11 +102,11 @@ const Main = () => {
                 HabiTrack
             </Text>
 
-            <TouchableOpacity onPress={toggleColorScheme}>
+            <Pressable onPress={toggleColorScheme}>
                 <Text className={mergeClassNames("text-lg font-base-bold", textColors)}>
                     Current theme: {colorScheme}
                 </Text>
-            </TouchableOpacity>
+            </Pressable>
         </SafeAreaView>
     );
 };

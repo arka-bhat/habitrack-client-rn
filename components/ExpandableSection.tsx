@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, Text, TouchableWithoutFeedback } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
+import { useColorScheme } from "nativewind";
 
 import CollapsableContainer from "./CollapsibleContainer";
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { textColors } from "@/constants/TailwindClassNameConstants";
-import { useColorScheme } from "nativewind";
 
 interface ExpandableSectionProps {
     title: string;

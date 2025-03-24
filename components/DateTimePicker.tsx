@@ -1,8 +1,9 @@
-import { Platform, View, Text, TouchableOpacity } from "react-native";
-import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import React from "react";
-import { mergeClassNames } from "@/utils/TailwindUtils";
-import { textColors } from "@/constants/TailwindClassNameConstants";
+import { Platform, View, Text, Pressable } from "react-native";
+import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+
+import { mergeClassNames } from "@utils/TailwindUtils";
+import { textColors } from "@constants/TailwindClassNameConstants";
 
 interface DateTimePickerProps {
     currentDate: Date;
@@ -30,14 +31,14 @@ const AndroidDateTimePicker: React.FC<DateTimePickerProps> = ({
             >
                 {currentDate.toLocaleDateString()}
             </Text>
-            <TouchableOpacity
+            <Pressable
                 className='flex flex-row items-center justify-center bg-light-secondary-150 dark:bg-dark-secondary-800 p-3 rounded-lg'
                 onPress={showDateTimePicker}
             >
                 <Text className={mergeClassNames("font-base-regular text-lg", textColors)}>
                     Open Calendar
                 </Text>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     );
 };

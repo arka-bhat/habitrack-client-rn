@@ -5,7 +5,7 @@ import {
     StatusBar,
     Text,
     TextInput,
-    TouchableOpacity,
+    Pressable,
     TouchableWithoutFeedback,
     View,
 } from "react-native";
@@ -175,7 +175,7 @@ const PhoneNumberScreen = () => {
                             </View>
 
                             {/* Send OTP Button */}
-                            <TouchableOpacity
+                            <Pressable
                                 className='w-full rounded-md p-4 items-center mb-4 bg-light-primary-400 dark:bg-dark-primary-500 active:bg-light-primary-500 dark:active:bg-dark-primary-600'
                                 onPress={() => handleSendOTP()}
                             >
@@ -183,18 +183,18 @@ const PhoneNumberScreen = () => {
                                     translationKey='button.sendOtp'
                                     className='text-white font-base-medium'
                                 />
-                            </TouchableOpacity>
+                            </Pressable>
 
                             {/* Create Account Link */}
                             <View className='flex-row mt-2'>
                                 <Text className={mergeClassNames("mr-2", textColors)}>
                                     Don't have an account?
                                 </Text>
-                                <TouchableOpacity>
+                                <Pressable>
                                     <Text className='text-light-primary-400 dark:text-dark-primary-400 font-base-medium'>
                                         Create Account
                                     </Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             </View>
                         </View>
                     </KeyboardAwareScrollView>

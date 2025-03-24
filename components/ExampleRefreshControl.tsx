@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, RefreshControl } from "react-native";
 import React, { useState } from "react";
+import { View, Text, ScrollView, RefreshControl } from "react-native";
 
 const CustomRefreshControl = () => {
     const [refreshing, setRefreshing] = useState(false);

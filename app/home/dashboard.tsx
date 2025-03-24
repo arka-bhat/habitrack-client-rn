@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Text, View, Image, TouchableOpacity, StatusBar, ScrollView } from "react-native";
+import { useEffect } from "react";
+import { Text, View, Image, Pressable, StatusBar, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, {
     useSharedValue,
@@ -65,12 +65,12 @@ const NoContent = () => {
                     Add your assets to keep track of their warranty and service history
                 </Text>
 
-                <TouchableOpacity
+                <Pressable
                     className='w-full mt-6 mb-4 p-4 rounded-md items-center bg-light-primary-400 dark:bg-dark-primary-500 active:bg-light-primary-500 dark:active:bg-dark-primary-600'
                     onPress={handleAddAsset}
                 >
                     <Text className='text-white font-base-medium'>Add Asset</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
         </Animated.View>
     );

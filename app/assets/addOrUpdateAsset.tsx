@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, Text, TouchableOpacity, StatusBar, View, Pressable } from "react-native";
+import { TextInput, Text, Pressable, StatusBar, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import {
@@ -21,6 +21,7 @@ import {
 } from "@constants/TailwindClassNameConstants";
 import { colors, mergeClassNames } from "@utils/TailwindUtils";
 import { useColorScheme } from "nativewind";
+import Dropdown from "@/components/CustomDropdown";
 
 // Define the type for the asset form data
 type AssetFormData = {
@@ -113,7 +114,7 @@ const AssetForm = () => {
                             value={formData.name}
                             onChangeText={(text) => handleInputChange("name", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-lg font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
                                 textColors,
                                 placeholderColors
                             )}
@@ -136,7 +137,7 @@ const AssetForm = () => {
                             value={formData.brand}
                             onChangeText={(text) => handleInputChange("brand", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-lg font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
                                 textColors,
                                 placeholderColors
                             )}
@@ -159,7 +160,7 @@ const AssetForm = () => {
                             value={formData.model}
                             onChangeText={(text) => handleInputChange("model", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-lg font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
                                 textColors,
                                 placeholderColors
                             )}
@@ -182,7 +183,7 @@ const AssetForm = () => {
                             value={formData.serialNumber}
                             onChangeText={(text) => handleInputChange("serialNumber", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-lg font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
                                 textColors,
                                 placeholderColors
                             )}
@@ -205,7 +206,7 @@ const AssetForm = () => {
                             value={formData.displayName}
                             onChangeText={(text) => handleInputChange("displayName", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-lg font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
                                 textColors,
                                 placeholderColors
                             )}
@@ -224,27 +225,9 @@ const AssetForm = () => {
                             Category
                         </Text>
 
-                        <DropdownPicker
-                            className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-lg font-base-semibold leading-tight",
-                                textColors,
-                                placeholderColors
-                            )}
-                            containerClassName='mb-2'
-                            textClassName='text-base font-base-medium'
-                            placeholderClassName={mergeClassNames(
-                                "text-lg font-base-semibold",
-                                placeholderTextColors
-                            )}
-                            dropDownContainerClassName={mergeClassNames(
-                                "border border-gray-300 rounded-lg",
-                                placeholderColors
-                            )}
-                            listItemLabelClassName='text-base font-base-medium'
-                            listItemContainerClassName='py-2'
-                            selectedItemLabelClassName='text-base font-medium text-light-primary-400 dark:text-dark-primary-500'
-                            tickIconClassName='text-base font-medium'
-                            items={[
+                        <Dropdown
+                            insideScrollView={true}
+                            options={[
                                 { label: "Option 1", value: "1" },
                                 { label: "Option 2", value: "2" },
                                 { label: "Option 3", value: "3" },
@@ -252,12 +235,22 @@ const AssetForm = () => {
                                 { label: "Option 5", value: "5" },
                                 { label: "Option 6", value: "6" },
                             ]}
-                            selectedValue={formData.category}
-                            onValueChange={(value) => {
-                                console.log("here", value);
-                                handleInputChange("category", value);
-                            }}
-                            placeholderText='Select a category'
+                            onSelect={(value) => Alert.alert("Selected:", value)}
+                            closeOnSelect={false}
+                            containerClassName={mergeClassNames("h-12", placeholderColors)}
+                            placeholderTextClassName={mergeClassNames(
+                                "font-base-semibold text-base opacity-[0.54]",
+                                placeholderTextColors
+                            )}
+                            labelClassName={mergeClassNames(
+                                "font-base-semibold text-base",
+                                placeholderTextColors
+                            )}
+                            dropdownContainerClassName={mergeClassNames(
+                                "border rounded mt-1",
+                                placeholderColors
+                            )}
+                            backdropClassName='bg-light-secondary-200'
                         />
                     </View>
 
@@ -276,7 +269,7 @@ const AssetForm = () => {
                             value={formData.location}
                             onChangeText={(text) => handleInputChange("location", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-lg font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
                                 textColors,
                                 placeholderColors
                             )}
@@ -337,7 +330,7 @@ const AssetForm = () => {
                             value={formData.warranties}
                             onChangeText={(text) => handleInputChange("warranties", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-lg font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
                                 textColors,
                                 placeholderColors
                             )}
@@ -379,7 +372,7 @@ const AssetForm = () => {
                             value={formData.notes}
                             onChangeText={(text) => handleInputChange("notes", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 pt-2 rounded-md h-40 tracking-wide text-lg font-base-semibold border",
+                                "flex-1 px-3 pt-2 rounded-md h-40 tracking-wide text-base font-base-semibold border",
                                 textColors,
                                 placeholderColors
                             )}
@@ -388,12 +381,12 @@ const AssetForm = () => {
                     </View>
 
                     {/* Submit Button */}
-                    <TouchableOpacity
+                    <Pressable
                         onPress={handleSubmit}
                         className='w-full rounded-md p-4 items-center bg-light-primary-400 dark:bg-dark-primary-500 active:bg-light-primary-500 dark:active:bg-dark-primary-600 mb-20'
                     >
                         <Text className='text-white font-base-medium'>Submit</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </KeyboardAwareScrollView>
                 <KeyboardToolbar />
             </KeyboardProvider>

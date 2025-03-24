@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-    View,
-    Platform,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-} from "react-native";
+import { View, StatusBar, Text, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView, KeyboardProvider } from "react-native-keyboard-controller";
 import { router } from "expo-router";
@@ -75,24 +68,21 @@ const OTPVerificationScreen = () => {
                         </View>
 
                         {/* Resend Code */}
-                        <TouchableOpacity
-                            className='items-center mb-6'
-                            onPress={() => handleResendCode()}
-                        >
+                        <Pressable className='items-center mb-6' onPress={() => handleResendCode()}>
                             <Text className='font-base-medium text-light-primary-400 dark:text-dark-primary-400'>
                                 Resend Code
                             </Text>
-                        </TouchableOpacity>
+                        </Pressable>
 
                         {/* Change number*/}
-                        <TouchableOpacity
+                        <Pressable
                             className='items-center mb-6'
                             onPress={() => handleChangeNumber()}
                         >
                             <Text className='font-base-medium text-light-primary-400 dark:text-dark-primary-400'>
                                 Change your number
                             </Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                 </KeyboardAwareScrollView>
             </KeyboardProvider>

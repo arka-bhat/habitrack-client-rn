@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
+import { View, Text, Pressable, Modal, FlatList } from "react-native";
+import { CountryCode } from "libphonenumber-js";
 
+import Header from "@components/Header";
 import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 import { mergeClassNames } from "@/utils/TailwindUtils";
-
-import Header from "./Header";
-import { CountryCode } from "libphonenumber-js";
 
 // Sample country codes (you'd typically import a more comprehensive list)
 const COUNTRY_CODES = [
@@ -44,14 +43,14 @@ const CountryCodePicker: React.FC<CountryCodePickerProps> = ({
 
     return (
         <View className={mergeClassNames("flex", backgroundColors)}>
-            <TouchableOpacity
+            <Pressable
                 className='bg-light-secondary-100 dark:bg-dark-secondary-800 rounded-md p-3 mr-2 w-20 h-16 justify-center items-center'
                 onPress={() => setIsModalVisible(true)}
             >
                 <Text className={mergeClassNames("text-xl font-base-bold", textColors)}>
                     {currentCode}
                 </Text>
-            </TouchableOpacity>
+            </Pressable>
 
             <Modal
                 visible={isModalVisible}
@@ -74,7 +73,7 @@ const CountryCodePicker: React.FC<CountryCodePickerProps> = ({
                         data={COUNTRY_CODES}
                         keyExtractor={(item) => item.index + ""}
                         renderItem={({ item }) => (
-                            <TouchableOpacity
+                            <Pressable
                                 className='p-4 border-b border-b-slate-300 mx-2.5'
                                 onPress={() => handleCodeSelect(item.code, item.iso as CountryCode)}
                             >
@@ -93,7 +92,7 @@ const CountryCodePicker: React.FC<CountryCodePickerProps> = ({
                                         {`${item.flag} ${item.country}`}
                                     </Text>
                                 </View>
-                            </TouchableOpacity>
+                            </Pressable>
                         )}
                     />
                 </View>

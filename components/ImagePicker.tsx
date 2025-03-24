@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
+import React from "react";
+import { View, Text, Pressable, Image, FlatList } from "react-native";
+import { useColorScheme } from "nativewind";
 import * as ExpoImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
+
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { textColors } from "@/constants/TailwindClassNameConstants";
-import { useColorScheme } from "nativewind";
 
 interface ImagePickerProps {
     children: React.ReactNode;
@@ -28,7 +29,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ children, value, onImageSelec
 
     return (
         <>
-            <TouchableOpacity onPress={pickImage}>{children}</TouchableOpacity>
+            <Pressable onPress={pickImage}>{children}</Pressable>
             {value && <Image source={{ uri: value }} className='w-24 h-24 mt-2' />}
         </>
     );
@@ -82,19 +83,19 @@ export const ImagePickerMultiple: React.FC<ImagePickerMultipleProps> = ({
                         renderItem={({ item, index }) => (
                             <View className='mr-2'>
                                 <Image source={{ uri: item }} className='w-36 h-36 rounded-lg' />
-                                <TouchableOpacity
+                                <Pressable
                                     className='absolute top-1 right-1 bg-dark-secondary-800 p-1 rounded-full'
                                     onPress={() => removeImage(index)}
                                 >
                                     <Ionicons name='close' size={16} color='#fff' />
-                                </TouchableOpacity>
+                                </Pressable>
                             </View>
                         )}
                     />
                 </View>
             )}
 
-            <TouchableOpacity
+            <Pressable
                 className='flex flex-row items-center justify-center bg-light-secondary-150 dark:bg-dark-secondary-800 p-3 rounded-lg'
                 onPress={pickImage}
             >
@@ -102,7 +103,7 @@ export const ImagePickerMultiple: React.FC<ImagePickerMultipleProps> = ({
                 <Text className={mergeClassNames("text-base font-base-semibold ml-1", textColors)}>
                     {images.length > 0 ? "Add more images" : "Add images"}
                 </Text>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     );
 };

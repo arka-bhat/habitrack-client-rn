@@ -1,10 +1,10 @@
-import { View, Text, TouchableOpacity, Platform } from "react-native";
+import React from "react";
+import { View, Text, Pressable, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
 
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { backgroundColors } from "@/constants/TailwindClassNameConstants";
-import React from "react";
 
 interface HeaderProps {
     children: React.ReactNode;
@@ -36,13 +36,13 @@ const Header: React.FC<HeaderProps> = ({
         >
             {iconPosition === "left" ? (
                 <>
-                    <TouchableOpacity onPress={onIconPress} className='justify-start'>
+                    <Pressable onPress={onIconPress} className='justify-start'>
                         <Ionicons
                             name={iconName}
                             size={iconSize}
                             color={iconColor ? iconColor : colors[colorMode].fg}
                         />
-                    </TouchableOpacity>
+                    </Pressable>
                     <View className='flex-1 justify-center items-center'>{children}</View>
                     <View className='w-10' />
                 </>
@@ -50,13 +50,13 @@ const Header: React.FC<HeaderProps> = ({
                 <>
                     <View className='w-10' />
                     <View className='flex-1 justify-center items-center'>{children}</View>
-                    <TouchableOpacity onPress={onIconPress} className='w-10 justify-end'>
+                    <Pressable onPress={onIconPress} className='w-10 justify-end'>
                         <Ionicons
                             name={iconName}
                             size={iconSize}
                             color={iconColor ? iconColor : colors[colorMode].fg}
                         />
-                    </TouchableOpacity>
+                    </Pressable>
                 </>
             )}
         </View>
