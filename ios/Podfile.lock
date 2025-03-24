@@ -265,6 +265,8 @@ PODS:
     - Yoga
   - ExpoSplashScreen (0.29.22):
     - ExpoModulesCore
+  - ExpoSystemUI (4.0.8):
+    - ExpoModulesCore
   - EXUpdatesInterface (1.0.0):
     - ExpoModulesCore
   - FBLazyVector (0.76.7)
@@ -2085,6 +2087,7 @@ DEPENDENCIES:
   - ExpoLocation (from `../node_modules/expo-location/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoSplashScreen (from `../node_modules/expo-splash-screen/ios`)
+  - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - EXUpdatesInterface (from `../node_modules/expo-updates-interface/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
@@ -2210,6 +2213,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-modules-core"
   ExpoSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
+  ExpoSystemUI:
+    :path: "../node_modules/expo-system-ui/ios"
   EXUpdatesInterface:
     :path: "../node_modules/expo-updates-interface/ios"
   FBLazyVector:
@@ -2375,6 +2380,7 @@ SPEC CHECKSUMS:
   ExpoLocation: e7dc025bde1bd3091ad7e616ea6145240672b2e4
   ExpoModulesCore: 98297c2cc7977c43740a2e52d850d94ac8dbf176
   ExpoSplashScreen: 0f281e3c2ded4757d2309276c682d023c6299c77
+  ExpoSystemUI: 2e5356d22b077c56c132b4dcbc5d69dd667b1f8c
   EXUpdatesInterface: 7c977640bdd8b85833c19e3959ba46145c5719db
   FBLazyVector: ca8044c9df513671c85167838b4188791b6f37e1
   fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be

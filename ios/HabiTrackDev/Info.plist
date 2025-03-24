@@ -27,6 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>habitrack</string>
           <string>com.arkabhat.habitrack</string>
         </array>
       </dict>
