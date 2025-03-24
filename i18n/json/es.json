@@ -1,0 +1,30 @@
+{
+    "auth": {
+        "dontHaveAccount": "¿No tienes una cuenta?",
+        "createAccount": "Crear cuenta",
+        "phoneVerification": "Verificación telefónica",
+        "enter6DigitCode": "Introduce el código de verificación de 6 dígitos enviado a tu número de teléfono",
+        "resendOtp": "Reenviar OTP",
+        "changeNumber": "Cambiar tu número"
+    },
+    "form": {
+        "placeholder": {
+            "phoneNumber": "Número de teléfono"
+        }
+    },
+    "dashboardPage": {
+        "title": "Tablero",
+        "haventAddedAssets": "Aún no has agregado ningún activo",
+        "addAssetToKeepTrack": "Agrega tus activos para hacer un seguimiento de su garantía e historial de servicio"
+    },
+    "alertsPage": {
+        "title": "Alertas"
+    },
+    "profilePage": {
+        "title": "Perfil"
+    },
+    "button": {
+        "sendOtp": "Enviar OTP",
+        "addAsset": "Agregar activo"
+    }
+}

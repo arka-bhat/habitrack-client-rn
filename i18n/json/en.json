@@ -1,0 +1,30 @@
+{
+    "auth": {
+        "dontHaveAccount": "Don't have an account?",
+        "createAccount": "Create Account",
+        "phoneVerification": "Phone Verification",
+        "enter6DigitCode": "Enter the 6-digit verification code sent to your phone number",
+        "resendOtp": "Resend OTP",
+        "changeNumber": "Change your number"
+    },
+    "form": {
+        "placeholder": {
+            "phoneNumber": "Phone Number"
+        }
+    },
+    "dashboardPage": {
+        "title": "Dashboard",
+        "haventAddedAssets": "You haven't added any assets yet",
+        "addAssetToKeepTrack": "Add your assets to keep track of their warranty and service history"
+    },
+    "alertsPage": {
+        "title": "Alerts"
+    },
+    "profilePage": {
+        "title": "Profile"
+    },
+    "button": {
+        "sendOtp": "Send OTP",
+        "addAsset": "Add Asset"
+    }
+}

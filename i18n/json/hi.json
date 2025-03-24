@@ -1,0 +1,30 @@
+{
+    "auth": {
+        "dontHaveAccount": "क्या आपके पास अकाउंट नहीं है?",
+        "createAccount": "अकाउंट बनाएं",
+        "phoneVerification": "फोन वेरिफिकेशन",
+        "enter6DigitCode": "अपने फोन नंबर पर भेजे गए 6 अंकों के OTP वेरिफिकेशन कोड को दर्ज करें",
+        "resendOtp": "OTP फिर से भेजें",
+        "changeNumber": "अपना नंबर बदलें"
+    },
+    "form": {
+        "placeholder": {
+            "phoneNumber": "फोन नंबर"
+        }
+    },
+    "dashboardPage": {
+        "title": "डैशबोर्ड",
+        "haventAddedAssets": "आपने अभी तक कोई संपत्ति नहीं जोड़ी है",
+        "addAssetToKeepTrack": "अपनी संपत्तियाँ जोड़ें ताकि आप उनकी वारंटी और सेवा इतिहास पर नज़र रख सकें"
+    },
+    "alertsPage": {
+        "title": "अलर्ट्स"
+    },
+    "profilePage": {
+        "title": "प्रोफाइल"
+    },
+    "button": {
+        "sendOtp": "OTP भेजें",
+        "addAsset": "संपत्ति जोड़ें"
+    }
+}
