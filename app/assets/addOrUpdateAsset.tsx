@@ -9,7 +9,7 @@ import {
 } from "react-native-keyboard-controller";
 
 import Header from "@/components/Header";
-import Dropdown from "@/components/CustomDropdown";
+import Dropdown from "@/components/DropdownPicker";
 import DateTimePicker from "@/components/DateTimePicker";
 import { ImagePickerMultiple } from "@/components/ImagePicker";
 import useColorMode from "@/hooks/useColorMode";

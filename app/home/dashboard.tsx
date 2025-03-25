@@ -11,7 +11,7 @@ import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 import Header from "@/components/Header";
-import Dropdown from "@/components/CustomDropdown";
+import Dropdown from "@/components/DropdownPicker";
 import ExpandableSection from "@/components/ExpandableSection";
 import useColorMode from "@/hooks/useColorMode";
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
