@@ -1,7 +1,11 @@
 import { View, TextInput, TextInputProps } from "react-native";
 import { useTranslation } from "react-i18next";
 
-const I18NTextInput = (props: TextInputProps & { placeholderTranslationKey: string }) => {
+interface I18NTextInputProps extends TextInputProps {
+    placeholderTranslationKey: string;
+}
+
+const I18NTextInput: React.FC<I18NTextInputProps> = (props) => {
     const { placeholderTranslationKey, ...textInputProps } = props;
     const { t } = useTranslation(); // Get translation function
 
