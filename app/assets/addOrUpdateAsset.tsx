@@ -8,18 +8,18 @@ import {
     KeyboardToolbar,
 } from "react-native-keyboard-controller";
 
-import Header from "@components/Header";
-import { ImagePickerMultiple } from "@components/ImagePicker";
-import DateTimePicker from "@components/DateTimePicker";
+import Header from "@/components/Header";
+import Dropdown from "@/components/CustomDropdown";
+import DateTimePicker from "@/components/DateTimePicker";
+import { ImagePickerMultiple } from "@/components/ImagePicker";
+import useColorMode from "@/hooks/useColorMode";
 import {
     backgroundColors,
     placeholderColors,
-    placeholderTextColors,
     textColors,
-} from "@constants/TailwindClassNameConstants";
-import { colors, mergeClassNames } from "@utils/TailwindUtils";
-import Dropdown from "@/components/CustomDropdown";
-import useColorMode from "@/hooks/useColorMode";
+} from "@/constants/TailwindClassNameConstants";
+import { colors, mergeClassNames } from "@/utils/TailwindUtils";
+import AssetCategories from "@/constants/AssetCategories";
 
 // Define the type for the asset form data
 type AssetFormData = {
@@ -111,7 +111,7 @@ const AssetForm = () => {
                             value={formData.name}
                             onChangeText={(text) => handleInputChange("name", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
                                 textColors,
                                 placeholderColors
                             )}
@@ -134,7 +134,7 @@ const AssetForm = () => {
                             value={formData.brand}
                             onChangeText={(text) => handleInputChange("brand", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
                                 textColors,
                                 placeholderColors
                             )}
@@ -157,7 +157,7 @@ const AssetForm = () => {
                             value={formData.model}
                             onChangeText={(text) => handleInputChange("model", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
                                 textColors,
                                 placeholderColors
                             )}
@@ -180,7 +180,7 @@ const AssetForm = () => {
                             value={formData.serialNumber}
                             onChangeText={(text) => handleInputChange("serialNumber", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
                                 textColors,
                                 placeholderColors
                             )}
@@ -203,7 +203,7 @@ const AssetForm = () => {
                             value={formData.displayName}
                             onChangeText={(text) => handleInputChange("displayName", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
                                 textColors,
                                 placeholderColors
                             )}
@@ -221,40 +221,34 @@ const AssetForm = () => {
                         >
                             Category
                         </Text>
-
                         <Dropdown
                             insideScrollView={true}
-                            minHeight={165}
-                            options={[
-                                { label: "Option 1", value: "1" },
-                                { label: "Option 2", value: "2" },
-                                { label: "Option 3", value: "3" },
-                                { label: "Option 4", value: "4" },
-                                { label: "Option 5", value: "5" },
-                                { label: "Option 6", value: "6" },
-                            ]}
+                            minHeight={170}
+                            options={AssetCategories}
                             onSelect={(value) => handleInputChange("category", value)}
                             closeOnSelect={true}
-                            containerClassName={mergeClassNames("h-12", placeholderColors)}
-                            placeholderClassName='border rounded'
+                            containerClassName={mergeClassNames(
+                                "h-12 rounded-lg border dark:border-light-secondary-500",
+                                placeholderColors
+                            )}
+                            placeholderClassName='border rounded-lg'
                             arrowColor={colors[colorMode].secondary[600]}
                             placeholderTextClassName={mergeClassNames(
                                 "font-base-semibold text-base text-light-secondary-600"
-                                // placeholderTextColors
                             )}
                             labelClassName={mergeClassNames(
                                 "font-base-semibold text-base",
                                 textColors
                             )}
                             dropdownContainerClassName={mergeClassNames(
-                                "w-full border rounded mt-1",
+                                "w-full border rounded-lg mt-1 dark:border-light-secondary-500",
                                 placeholderColors
                             )}
                             optionClassName={mergeClassNames(
                                 "font-base-semibold text-base",
                                 textColors
                             )}
-                            backdropClassName='bg-light-secondary-500/20'
+                            backdropClassName='bg-light-secondary-500/20 dark:bg-dark-secondary-500/40'
                         />
                     </View>
 
@@ -273,7 +267,7 @@ const AssetForm = () => {
                             value={formData.location}
                             onChangeText={(text) => handleInputChange("location", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
                                 textColors,
                                 placeholderColors
                             )}
@@ -281,9 +275,10 @@ const AssetForm = () => {
                         />
                     </View>
 
-                    {/* Manufacture Date */}
+                    {/* Manufacture and Install Date */}
                     <View className='flex flex-row justify-around'>
-                        <View className='pb-5 items-center'>
+                        {/* Manufacture Date */}
+                        <View className='pb-5 flex-col items-center'>
                             <Text
                                 className={mergeClassNames(
                                     "text-base font-base-medium mb-1",
@@ -301,7 +296,7 @@ const AssetForm = () => {
                         </View>
 
                         {/* Install Date */}
-                        <View className='pb-5 items-center'>
+                        <View className='pb-5 flex-col items-center'>
                             <Text
                                 className={mergeClassNames(
                                     "text-base font-base-medium mb-1",
@@ -334,7 +329,7 @@ const AssetForm = () => {
                             value={formData.warranties}
                             onChangeText={(text) => handleInputChange("warranties", text)}
                             className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold border leading-tight",
+                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
                                 textColors,
                                 placeholderColors
                             )}
