@@ -3,10 +3,10 @@ import { View, Text, TouchableWithoutFeedback } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 
-import CollapsableContainer from "./CollapsibleContainer";
+import CollapsableContainer from "@/components/CollapsibleContainer";
+import useColorMode from "@/hooks/useColorMode";
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { textColors } from "@/constants/TailwindClassNameConstants";
-import useColorMode from "@/hooks/useColorMode";
 
 interface ExpandableSectionProps {
     title: string;

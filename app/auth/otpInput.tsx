@@ -4,10 +4,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView, KeyboardProvider } from "react-native-keyboard-controller";
 import { router } from "expo-router";
 
-import OTPInput from "@components/OTPInput";
-import { resetAndNavigate } from "@utils/NavigationHelpers";
-import { mergeClassNames } from "@utils/TailwindUtils";
-import { backgroundColors, textColors } from "@constants/TailwindClassNameConstants";
+import OTPInput from "@/components/OTPInput";
+import { resetAndNavigate } from "@/utils/NavigationHelpers";
+import { mergeClassNames } from "@/utils/TailwindUtils";
+import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 
 const OTPVerificationScreen = () => {
     const [verificationCode, setVerificationCode] = useState("");

@@ -1,11 +1,11 @@
 import { Text, StatusBar, View, ScrollView, Image, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import Header from "@components/Header";
-import SettingsCategory, { SettingsOptionItem } from "@components/Settings";
-import { backgroundColors, textColors } from "@constants/TailwindClassNameConstants";
-import { colors, mergeClassNames } from "@utils/TailwindUtils";
+import Header from "@/components/Header";
+import SettingsCategory, { SettingsOptionItem } from "@/components/Settings";
+import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import useColorMode from "@/hooks/useColorMode";
+import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 
 interface MenuCategory {
     title: string;

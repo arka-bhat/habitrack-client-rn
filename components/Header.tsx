@@ -2,9 +2,9 @@ import React from "react";
 import { View, Pressable, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+import useColorMode from "@/hooks/useColorMode";
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { backgroundColors } from "@/constants/TailwindClassNameConstants";
-import useColorMode from "@/hooks/useColorMode";
 
 interface HeaderProps {
     children: React.ReactNode;

@@ -8,18 +8,14 @@ import Animated, {
     Easing,
 } from "react-native-reanimated";
 import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 import Header from "@/components/Header";
 import Dropdown from "@/components/CustomDropdown";
 import ExpandableSection from "@/components/ExpandableSection";
-import { colors, mergeClassNames } from "@/utils/TailwindUtils";
-import {
-    backgroundColors,
-    placeholderTextColors,
-    textColors,
-} from "@/constants/TailwindClassNameConstants";
-import { Ionicons } from "@expo/vector-icons";
 import useColorMode from "@/hooks/useColorMode";
+import { colors, mergeClassNames } from "@/utils/TailwindUtils";
+import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 
 const NoContent = () => {
     const fadeAnim = useSharedValue(0);

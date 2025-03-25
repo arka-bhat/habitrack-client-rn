@@ -3,13 +3,7 @@
     "compilerOptions": {
         "strict": true,
         "paths": {
-            "@/*": ["./*"],
-            "@components/*": ["./components/*"],
-            "@assets/*": ["./assets/*"],
-            "@utils/*": ["./utils/*"],
-            "@constants/*": ["./constants/*"],
-            "@store/*": ["./store/*"],
-            "@i18n/*": ["./i18n/*"]
+            "@/*": ["./*"]
         }
     }
 }

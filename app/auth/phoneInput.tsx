@@ -20,11 +20,11 @@ import {
 } from "libphonenumber-js";
 import examples from "libphonenumber-js/mobile/examples";
 
-import { colors, mergeClassNames } from "@utils/TailwindUtils";
-import { backgroundColors, textColors } from "@constants/TailwindClassNameConstants";
-import CountryCodePicker from "@components/CountryCodePicker";
-import I18nText from "@components/i18nText";
+import CountryCodePicker from "@/components/CountryCodePicker";
+import I18nText from "@/components/i18nText";
 import useColorMode from "@/hooks/useColorMode";
+import { colors, mergeClassNames } from "@/utils/TailwindUtils";
+import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 
 const PhoneNumberScreen = () => {
     const inputRef = useRef(null);

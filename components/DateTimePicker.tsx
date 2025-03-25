@@ -2,8 +2,8 @@ import React from "react";
 import { Platform, View, Text, Pressable } from "react-native";
 import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
-import { mergeClassNames } from "@utils/TailwindUtils";
-import { textColors } from "@constants/TailwindClassNameConstants";
+import { mergeClassNames } from "@/utils/TailwindUtils";
+import { textColors } from "@/constants/TailwindClassNameConstants";
 
 interface DateTimePickerProps {
     currentDate: Date;

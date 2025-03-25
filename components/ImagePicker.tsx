@@ -3,9 +3,9 @@ import { View, Text, Pressable, Image, FlatList } from "react-native";
 import * as ExpoImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 
+import useColorMode from "@/hooks/useColorMode";
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { textColors } from "@/constants/TailwindClassNameConstants";
-import useColorMode from "@/hooks/useColorMode";
 
 interface ImagePickerProps {
     children: React.ReactNode;

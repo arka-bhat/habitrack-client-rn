@@ -2,9 +2,9 @@ import { useEffect, useRef } from "react";
 import { Animated, Text, StatusBar, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import Header from "@components/Header";
-import { textColors } from "@constants/TailwindClassNameConstants";
-import { mergeClassNames } from "@utils/TailwindUtils";
+import Header from "@/components/Header";
+import { mergeClassNames } from "@/utils/TailwindUtils";
+import { textColors } from "@/constants/TailwindClassNameConstants";
 
 const NoAlerts = () => {
     const fadeAnim = useRef(new Animated.Value(0)).current;

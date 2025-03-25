@@ -2,11 +2,10 @@ import { useState } from "react";
 import { View, Text, Pressable, Modal, FlatList } from "react-native";
 import { CountryCode } from "libphonenumber-js";
 
-import Header from "@components/Header";
-import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
+import Header from "@/components/Header";
 import { mergeClassNames } from "@/utils/TailwindUtils";
+import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 
-// Sample country codes (you'd typically import a more comprehensive list)
 const COUNTRY_CODES = [
     { index: 1, code: "+1", country: "United States", iso: "US", flag: "🇺🇸" },
     { index: 2, code: "+44", country: "United Kingdom", iso: "GB", flag: "🇬🇧" },

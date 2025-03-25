@@ -13,8 +13,8 @@ import { useNavigation } from "expo-router";
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 
-import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import useColorMode from "@/hooks/useColorMode";
+import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 
 interface Option {
     label: string;
@@ -175,7 +175,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                 onLayout={onTriggerLayout}
                 onPress={toggleDropdown}
                 className={mergeClassNames(
-                    "p-3 flex-row justify-between items-center",
+                    "px-3 pt-3 pb-2 flex-row justify-between items-center",
                     placeholderClassName
                 )}
             >

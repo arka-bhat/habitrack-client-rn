@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { colorScheme, useColorScheme } from "nativewind";
 
-import i18nConfig from "@i18n/i18n";
+import i18nConfig from "@/i18n";
 import { mergeClassNames } from "@/utils/TailwindUtils";
 import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 import i18next from "i18next";

@@ -2,8 +2,8 @@ import { Tabs } from "expo-router";
 import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { colors } from "@/utils/TailwindUtils";
 import useColorMode from "@/hooks/useColorMode";
+import { colors } from "@/utils/TailwindUtils";
 
 export default function Layout() {
     const { colorMode } = useColorMode();
