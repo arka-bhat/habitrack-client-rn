@@ -12,18 +12,17 @@ export default function Layout() {
         <Tabs
             screenOptions={{
                 headerShown: false,
-                // Use your tailwind colors for active and inactive states
-                tabBarActiveTintColor: colors[colorMode].primary[400], // Primary color
-                tabBarInactiveTintColor: colors[colorMode].secondary[500], // Secondary muted color
+                tabBarActiveTintColor: colors[colorMode].primary[400],
+                tabBarInactiveTintColor: colors[colorMode].secondary[500],
                 tabBarStyle: {
-                    backgroundColor: colors[colorMode].background, // Background color
-                    borderTopColor: colors[colorMode].muted, // Border color
+                    backgroundColor: colors[colorMode].background,
+                    borderTopColor: colors[colorMode].muted,
                 },
                 tabBarButton: (props) => (
                     <Pressable
                         {...props}
-                        android_ripple={null} // This disables the ripple effect
-                        android_disableSound={true} // Optional: also disables the sound
+                        android_ripple={null}
+                        android_disableSound={true}
                         style={props.style}
                     />
                 ),
