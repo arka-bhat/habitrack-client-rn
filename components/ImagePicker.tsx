@@ -9,11 +9,11 @@ import { textColors } from "@/constants/TailwindClassNameConstants";
 
 interface ImagePickerProps {
     children: React.ReactNode;
-    value?: string;
+    image?: string;
     onImageSelect: (value: string) => void;
 }
 
-const ImagePicker: React.FC<ImagePickerProps> = ({ children, value, onImageSelect }) => {
+const ImagePicker: React.FC<ImagePickerProps> = ({ children, image, onImageSelect }) => {
     const pickImage = async () => {
         const result = await ExpoImagePicker.launchImageLibraryAsync({
             mediaTypes: ["images"],
@@ -30,7 +30,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ children, value, onImageSelec
     return (
         <>
             <Pressable onPress={pickImage}>{children}</Pressable>
-            {value && <Image source={{ uri: value }} className='w-24 h-24 mt-2' />}
+            {image && <Image source={{ uri: image }} className='w-24 h-24 mt-2' />}
         </>
     );
 };

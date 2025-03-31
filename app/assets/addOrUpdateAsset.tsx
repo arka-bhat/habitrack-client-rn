@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, Text, Pressable, StatusBar, View } from "react-native";
+import { Text, Pressable, StatusBar, View, Alert, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import {
@@ -8,66 +8,171 @@ import {
     KeyboardToolbar,
 } from "react-native-keyboard-controller";
 
+import { useAssetStore } from "@/store/AssetStore";
+import { AssetInput, isAssetFieldKey, validateAsset } from "@/types/asset";
 import Header from "@/components/Header";
-import Dropdown from "@/components/DropdownPicker";
-import DateTimePicker from "@/components/DateTimePicker";
-import { ImagePickerMultiple } from "@/components/ImagePicker";
-import useColorMode from "@/hooks/useColorMode";
-import {
-    backgroundColors,
-    placeholderColors,
-    textColors,
-} from "@/constants/TailwindClassNameConstants";
-import { colors, mergeClassNames } from "@/utils/TailwindUtils";
+import FormField, { FormFields } from "@/components/Form";
+import { mergeClassNames } from "@/utils/TailwindUtils";
+import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 import AssetCategories from "@/constants/AssetCategories";
 
-// Define the type for the asset form data
-type AssetFormData = {
-    name: string;
-    brand: string;
-    model: string;
-    serialNumber: string;
-    displayName: string;
-    category: string;
-    location: string;
-    size: string;
-    manufactureDate: string;
-    installDate: string;
-    warranties: string;
-    notes: string;
-    images: string[];
-};
+const AssetForm = ({ assetId }: { assetId?: string }) => {
+    // Local form state
+    const [formData, setFormData] = useState<Partial<AssetInput>>(
+        assetId
+            ? useAssetStore.getState().getAssetById(assetId) ?? {
+                  name: undefined,
+                  brand: undefined,
+                  model: undefined,
+                  serialNumber: undefined,
+                  displayName: "",
+                  category: "",
+                  location: "",
+                  size: "",
+                  manufactureDate: new Date(),
+                  installDate: new Date(),
+                  warranties: "",
+                  notes: "",
+                  images: [],
+              }
+            : {
+                  name: undefined,
+                  brand: undefined,
+                  model: undefined,
+                  serialNumber: undefined,
+                  displayName: "",
+                  category: "",
+                  location: "",
+                  size: "",
+                  manufactureDate: new Date(),
+                  installDate: new Date(),
+                  warranties: "",
+                  notes: "",
+                  images: [],
+              }
+    );
 
-const AssetForm = () => {
-    const { colorMode } = useColorMode();
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [formData, setFormData] = useState<AssetFormData>({
-        name: "",
-        brand: "",
-        model: "",
-        serialNumber: "",
-        displayName: "",
-        category: "",
-        location: "",
-        size: "",
-        manufactureDate: "",
-        installDate: "",
-        warranties: "",
-        notes: "",
-        images: [],
-    });
+    // Zustand actions
+    const { saveAsset, updateAsset } = useAssetStore();
 
-    // Function to handle date change
-    const handleDateChange = (key: keyof AssetFormData, date: Date) => {
-        setFormData({ ...formData, [key]: date.toISOString() });
+    const formFields: FormFields[] = [
+        {
+            key: "name",
+            label: "Name",
+            inputType: "text",
+            required: true,
+        },
+        {
+            key: "brand",
+            label: "Brand",
+            inputType: "text",
+            required: true,
+        },
+        {
+            key: "model",
+            label: "Model",
+            inputType: "text",
+            required: true,
+        },
+        {
+            key: "serialNumber",
+            label: "Serial Number",
+            inputType: "text",
+            required: true,
+        },
+        {
+            key: "displayName",
+            label: "Display Name",
+            inputType: "text",
+        },
+        {
+            key: "category",
+            label: "Category",
+            inputType: "dropdown",
+            options: AssetCategories,
+            required: true,
+        },
+        {
+            key: "location",
+            label: "Location",
+            inputType: "text",
+        },
+        {
+            key: "manufactureDate",
+            label: "Manufacture Date",
+            inputType: "date",
+        },
+        {
+            key: "installDate",
+            label: "Install Date",
+            inputType: "date",
+        },
+        {
+            key: "warranties",
+            label: "Warranties",
+            inputType: "text",
+        },
+        {
+            key: "images",
+            label: "Product Images",
+            inputType: "images",
+        },
+        {
+            key: "notes",
+            label: "Notes",
+            inputType: "textarea",
+        },
+    ];
+
+    const handleInputChange = (key: string, value: any) => {
+        if (isAssetFieldKey(key)) {
+            const sanitizedValue = !value && value !== false ? undefined : value;
+
+            setFormData((prev) => ({
+                ...prev,
+                [key]: sanitizedValue,
+            }));
+
+            if (errors[key]) {
+                setErrors((prev) => ({ ...prev, [key]: "" }));
+            }
+        }
     };
 
-    const handleInputChange = (key: keyof AssetFormData, value: string | string[]) => {
-        setFormData({ ...formData, [key]: value });
-    };
+    const handleSubmit = async () => {
+        // Client-side validation
+        const validation = validateAsset(formData);
+        if (!validation.success) {
+            setErrors(
+                validation.error.issues.reduce<Record<string, string>>((acc, issue) => {
+                    const key = issue.path[0];
+                    if (typeof key === "string" && isAssetFieldKey(key)) {
+                        acc[key] = issue.message;
+                    }
+                    return acc;
+                }, {})
+            );
+            return;
+        }
 
-    const handleSubmit = () => {
-        console.log("Form Data:", formData);
+        // Submit to Zustand
+        setIsSubmitting(true);
+        try {
+            const success = assetId
+                ? await updateAsset(assetId, validation.data)
+                : await saveAsset(validation.data);
+
+            if (success) {
+                router.back();
+            } else {
+                Alert.alert("Error", "Failed to save asset");
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -84,7 +189,7 @@ const AssetForm = () => {
                     iconSize={24}
                 >
                     <Text className={mergeClassNames("text-xl font-base-semibold", textColors)}>
-                        Add Asset
+                        {assetId ? "Edit Asset" : "Add Asset"}
                     </Text>
                 </Header>
             </View>
@@ -96,296 +201,44 @@ const AssetForm = () => {
                     keyboardShouldPersistTaps='handled'
                     nestedScrollEnabled={true}
                 >
-                    {/* Name */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Name
-                        </Text>
-                        <TextInput
-                            placeholder='Product Name'
-                            value={formData.name}
-                            onChangeText={(text) => handleInputChange("name", text)}
-                            className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
-                                textColors,
-                                placeholderColors
-                            )}
-                            placeholderTextColor={colors["light"].secondary[600]}
+                    {formFields.map((field) => (
+                        <FormField
+                            key={field.key}
+                            config={field}
+                            value={formData[field.key as keyof AssetInput] ?? ""}
+                            onChange={handleInputChange}
+                            error={!!errors[field.key]}
+                            errorMessage={errors[field.key] ?? ""}
                         />
-                    </View>
+                    ))}
 
-                    {/* Brand */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Brand
-                        </Text>
-                        <TextInput
-                            placeholder='Enter the brand'
-                            value={formData.brand}
-                            onChangeText={(text) => handleInputChange("brand", text)}
-                            className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
-                                textColors,
-                                placeholderColors
-                            )}
-                            placeholderTextColor={colors["light"].secondary[600]}
-                        />
-                    </View>
-
-                    {/* Model */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Model
-                        </Text>
-                        <TextInput
-                            placeholder='Enter the model'
-                            value={formData.model}
-                            onChangeText={(text) => handleInputChange("model", text)}
-                            className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
-                                textColors,
-                                placeholderColors
-                            )}
-                            placeholderTextColor={colors["light"].secondary[600]}
-                        />
-                    </View>
-
-                    {/* Serial Number */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Serial Number
-                        </Text>
-                        <TextInput
-                            placeholder='Enter the serial number'
-                            value={formData.serialNumber}
-                            onChangeText={(text) => handleInputChange("serialNumber", text)}
-                            className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
-                                textColors,
-                                placeholderColors
-                            )}
-                            placeholderTextColor={colors["light"].secondary[600]}
-                        />
-                    </View>
-
-                    {/* Display Name */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Display Name
-                        </Text>
-                        <TextInput
-                            placeholder='Enter a display name'
-                            value={formData.displayName}
-                            onChangeText={(text) => handleInputChange("displayName", text)}
-                            className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
-                                textColors,
-                                placeholderColors
-                            )}
-                            placeholderTextColor={colors["light"].secondary[600]}
-                        />
-                    </View>
-
-                    {/* Category */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Category
-                        </Text>
-                        <Dropdown
-                            insideScrollView={true}
-                            minHeight={170}
-                            options={AssetCategories}
-                            onSelect={(value) => handleInputChange("category", value)}
-                            closeOnSelect={true}
-                            containerClassName={mergeClassNames(
-                                "h-12 rounded-lg border dark:border-light-secondary-500",
-                                placeholderColors
-                            )}
-                            placeholderClassName='border rounded-lg'
-                            arrowColor={colors[colorMode].secondary[600]}
-                            placeholderTextClassName={mergeClassNames(
-                                "font-base-semibold text-base text-light-secondary-600"
-                            )}
-                            labelClassName={mergeClassNames(
-                                "font-base-semibold text-base",
-                                textColors
-                            )}
-                            dropdownContainerClassName={mergeClassNames(
-                                "w-full border rounded-lg mt-1 dark:border-light-secondary-500",
-                                placeholderColors
-                            )}
-                            optionClassName={mergeClassNames(
-                                "font-base-semibold text-base",
-                                textColors
-                            )}
-                            backdropClassName='bg-light-secondary-500/20 dark:bg-dark-secondary-500/40'
-                        />
-                    </View>
-
-                    {/* Location */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Location
-                        </Text>
-                        <TextInput
-                            placeholder='Enter location'
-                            value={formData.location}
-                            onChangeText={(text) => handleInputChange("location", text)}
-                            className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
-                                textColors,
-                                placeholderColors
-                            )}
-                            placeholderTextColor={colors["light"].secondary[600]}
-                        />
-                    </View>
-
-                    {/* Manufacture and Install Date */}
-                    <View className='flex flex-row justify-around'>
-                        {/* Manufacture Date */}
-                        <View className='pb-5 flex-col items-center'>
-                            <Text
-                                className={mergeClassNames(
-                                    "text-base font-base-medium mb-1",
-                                    textColors
-                                )}
-                            >
-                                Manufacture Date
-                            </Text>
-                            <DateTimePicker
-                                currentDate={new Date(formData?.manufactureDate || new Date())}
-                                onChange={(date: Date) =>
-                                    handleDateChange("manufactureDate", date || new Date())
-                                }
-                            />
-                        </View>
-
-                        {/* Install Date */}
-                        <View className='pb-5 flex-col items-center'>
-                            <Text
-                                className={mergeClassNames(
-                                    "text-base font-base-medium mb-1",
-                                    textColors
-                                )}
-                            >
-                                Install Date
-                            </Text>
-                            <DateTimePicker
-                                currentDate={new Date(formData?.installDate || new Date())}
-                                onChange={(date: Date) =>
-                                    handleDateChange("installDate", date || new Date())
-                                }
-                            />
-                        </View>
-                    </View>
-
-                    {/* Warranties */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Warranties
-                        </Text>
-                        <TextInput
-                            placeholder='warranties'
-                            value={formData.warranties}
-                            onChangeText={(text) => handleInputChange("warranties", text)}
-                            className={mergeClassNames(
-                                "flex-1 px-3 rounded-md h-12 tracking-wide text-base font-base-semibold leading-tight border dark:border-light-secondary-500",
-                                textColors,
-                                placeholderColors
-                            )}
-                            placeholderTextColor={colors["light"].secondary[600]}
-                        />
-                    </View>
-
-                    {/* Product Images */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Product Image
-                        </Text>
-                        <ImagePickerMultiple
-                            images={formData.images}
-                            onImageSelect={(value) => handleInputChange("images", value)}
-                        >
-                            <></>
-                        </ImagePickerMultiple>
-                    </View>
-
-                    {/* Notes */}
-                    <View className='pb-5'>
-                        <Text
-                            className={mergeClassNames(
-                                "text-base font-base-medium mb-1",
-                                textColors
-                            )}
-                        >
-                            Notes
-                        </Text>
-                        <TextInput
-                            multiline
-                            placeholder='Enter notes'
-                            value={formData.notes}
-                            onChangeText={(text) => handleInputChange("notes", text)}
-                            className={mergeClassNames(
-                                "flex-1 px-3 pt-2 rounded-md h-40 tracking-wide text-base font-base-semibold border",
-                                textColors,
-                                placeholderColors
-                            )}
-                            placeholderTextColor={colors["light"].secondary[600]}
-                        />
-                    </View>
-
-                    {/* Submit Button */}
                     <Pressable
                         onPress={handleSubmit}
+                        disabled={isSubmitting}
                         className='w-full rounded-md p-4 items-center bg-light-primary-400 dark:bg-dark-primary-500 active:bg-light-primary-500 dark:active:bg-dark-primary-600 mb-20'
                     >
-                        <Text className='text-white font-base-medium'>Submit</Text>
+                        {isSubmitting ? (
+                            <ActivityIndicator color='white' />
+                        ) : (
+                            <Text className='text-white font-base-medium'>Submit</Text>
+                        )}
                     </Pressable>
+
+                    {/* Debug view - remove in production */}
+                    {__DEV__ && (
+                        <View className='p-4 bg-gray-100'>
+                            <Text>Current State:</Text>
+                            <Text className='text-xs'>{JSON.stringify(formData, null, 2)}</Text>
+                            {Object.keys(errors).length > 0 && (
+                                <>
+                                    <Text className='mt-2 text-red-500'>Errors:</Text>
+                                    <Text className='text-xs'>
+                                        {JSON.stringify(errors, null, 2)}
+                                    </Text>
+                                </>
+                            )}
+                        </View>
+                    )}
                 </KeyboardAwareScrollView>
                 <KeyboardToolbar />
             </KeyboardProvider>
