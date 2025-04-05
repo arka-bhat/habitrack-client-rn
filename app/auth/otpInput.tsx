@@ -15,7 +15,6 @@ const OTPVerificationScreen = () => {
     const handleVerify = (code: string): void => {
         // Validate code and proceed
         setVerificationCode(code);
-        console.log("OTP Code:", code);
         if (!code || code.length !== 6) {
             alert("Please enter the complete 6-digit code");
             return;

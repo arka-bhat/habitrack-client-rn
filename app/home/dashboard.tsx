@@ -24,7 +24,7 @@ const NoContent = () => {
     const translateYAnim = useSharedValue(65);
 
     const handleAddAsset = (): void => {
-        router.navigate("/assets/addOrUpdateAsset");
+        router.navigate("/assets/addOrUpdate");
     };
 
     useEffect(() => {
@@ -151,7 +151,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ categorizedAssets }
                                     {/* Asset Image */}
                                     {asset.images?.[0] ? (
                                         <Image
-                                            source={{ uri: asset.images[0] }}
+                                            source={{ uri: asset.images[0].uri }}
                                             className='w-full aspect-square rounded-lg mb-2'
                                             resizeMode='cover'
                                         />
