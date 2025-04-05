@@ -1,5 +1,9 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+# vscode
+
+.vscode/
+
 # dependencies
 
 node_modules/
@@ -10,6 +14,11 @@ node_modules/
 dist/
 web-build/
 expo-env.d.ts
+
+# Builds
+
+android/
+ios/
 
 # Native
 

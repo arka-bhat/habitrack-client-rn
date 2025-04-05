@@ -32,9 +32,9 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="habitrack"/>
         <data android:scheme="com.arkabhat.habitrack"/>
         <data android:scheme="exp+habitrack"/>
-        <data android:scheme="habitrack"/>
       </intent-filter>
     </activity>
   </application>
