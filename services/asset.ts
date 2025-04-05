@@ -1,11 +1,15 @@
 import { AssetDB, AssetInput } from "@/types/asset";
 
-export const mockCreateAssetAPI = async (data: AssetInput): Promise<AssetDB> => {
+export const mockCreateAssetAPI = async (
+    propertyId: string,
+    data: AssetInput
+): Promise<AssetDB> => {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
                 ...data,
                 id: `mock-${Date.now()}`, // Simulated server-generated ID
+                propertyId,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             });
@@ -13,12 +17,17 @@ export const mockCreateAssetAPI = async (data: AssetInput): Promise<AssetDB> => 
     });
 };
 
-export const mockUpdateAssetAPI = async (id: string, data: AssetInput): Promise<AssetDB> => {
+export const mockUpdateAssetAPI = async (
+    assetId: string,
+    propertyId: string,
+    data: AssetInput
+): Promise<AssetDB> => {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
                 ...data,
-                id,
+                id: assetId,
+                propertyId,
                 createdAt: "2023-01-01T00:00:00Z", // Mock existing created date
                 updatedAt: new Date().toISOString(),
             });

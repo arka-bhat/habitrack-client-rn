@@ -4,7 +4,8 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import { MMKV } from "react-native-mmkv";
 
 import { mockCreateAssetAPI, mockUpdateAssetAPI } from "@/services/asset";
-import { Asset, CategorizedAssets } from "@/types/asset";
+import { Asset, AssetInput, CategorizedAssets } from "@/types/asset";
+import { usePropertyStore } from "./PropertyStore";
 
 const assetStorage = new MMKV({ id: "asset-storage" });
 
@@ -13,9 +14,11 @@ const zustandStorage = {
         const value = assetStorage.getString(name);
         return value !== undefined ? value : null;
     },
+
     setItem: (name: string, value: string): void => {
         assetStorage.set(name, value);
     },
+
     removeItem: (name: string): void => {
         assetStorage.delete(name);
     },
@@ -27,93 +30,182 @@ interface AssetsByLocationOptions {
 
 type AssetStore = {
     isHydrated: boolean;
-    // Business Data
     assets: Asset[];
+    assetsMap: Record<string, Asset>;
     currentAsset: Asset | null;
 
-    // API Operations
-    saveAsset: (data: Asset) => Promise<boolean>;
-    updateAsset: (id: string, data: Asset) => Promise<boolean>;
+    /**
+     * Creates a new asset linked to the current property
+     * @param {Omit<AssetInput, 'propertyId'>} data - Asset data without propertyId
+     * @returns {Promise<boolean>} True if successful
+     * @throws {Error} When no current property is set
+     */
+    saveAsset: (data: Omit<AssetInput, "propertyId">) => Promise<boolean>;
+
+    /**
+     * Updates an existing asset while maintaining its property association
+     * @param {string} id - ID of the asset to update
+     * @param {Omit<AssetInput, 'propertyId'>} data - New asset data
+     * @returns {Promise<boolean>} True if successful
+     * @throws {Error} When no current property is set
+     */
+    updateAsset: (id: string, data: Omit<AssetInput, "propertyId">) => Promise<boolean>;
+
+    /**
+     * Deletes an asset
+     * @param {string} id - Asset ID to delete
+     * @returns {Promise<boolean>} True if successful
+     */
     deleteAsset: (id: string) => Promise<boolean>;
+
+    /**
+     * Loads assets from storage
+     * @returns {Promise<void>}
+     */
     loadAssets: () => Promise<void>;
 
-    // Utilities
-    getAssetById: (id: string) => Asset | undefined;
-    getAssetsByLocation: (options?: AssetsByLocationOptions) => CategorizedAssets;
+    /**
+     * Gets an asset by ID with O(1) lookup
+     * @param {string|null|undefined} id - Asset ID
+     * @returns {Asset|undefined} The asset or undefined if not found
+     */
+    getAssetById: (id: string | null | undefined) => Asset | undefined;
+
+    /**
+     * Gets assets grouped by location for the current property
+     * @returns {CategorizedAssets} Assets grouped by location
+     * @throws {Error} When no current property is set
+     */
+    getAssetsByLocation: () => CategorizedAssets;
+
+    /**
+     * Gets all assets belonging to the current property
+     * @returns {Asset[]} Array of assets
+     * @throws {Error} When no current property is set
+     */
+    getAssetsForCurrentProperty: () => Asset[];
 };
 
 export const useAssetStore = create<AssetStore>()(
     persist(
-        (set, get) => ({
-            isHydrated: false,
+        (set, get) => {
+            const getCurrentPropertyId = () => {
+                const property = usePropertyStore.getState().currentProperty;
+                if (!property) return "1";
+                return property.id;
+            };
 
-            // Business Data
-            assets: [],
-            currentAsset: null,
+            return {
+                isHydrated: false,
+                assets: [],
+                assetsMap: {},
+                currentAsset: null,
 
-            // API Operations
-            saveAsset: async (data) => {
-                try {
-                    const newAsset = await mockCreateAssetAPI(data);
-                    set((state) => ({ assets: [...state.assets, newAsset] }));
+                saveAsset: async (data) => {
+                    try {
+                        const propertyId = getCurrentPropertyId();
+                        const newAsset = await mockCreateAssetAPI(propertyId!, data);
+
+                        set((state) => ({
+                            assets: [...state.assets, newAsset],
+                            assetsMap: { ...state.assetsMap, [newAsset.id]: newAsset },
+                        }));
+                        return true;
+                    } catch (error) {
+                        console.error("Save failed:", error);
+                        return false;
+                    }
+                },
+
+                updateAsset: async (id, data) => {
+                    if (!id) return false;
+
+                    try {
+                        const propertyId = getCurrentPropertyId();
+                        const updatedAsset = await mockUpdateAssetAPI(id, propertyId!, data);
+
+                        set((state) => ({
+                            assets: state.assets.map((asset) =>
+                                asset.id === id ? updatedAsset : asset
+                            ),
+                            assetsMap: { ...state.assetsMap, [id]: updatedAsset },
+                        }));
+                        return true;
+                    } catch (error) {
+                        console.error("Update failed:", error);
+                        return false;
+                    }
+                },
+
+                deleteAsset: async (id) => {
+                    if (!id) return false;
+
+                    set((state) => {
+                        const newAssetsMap = { ...state.assetsMap };
+                        delete newAssetsMap[id];
+
+                        return {
+                            assets: state.assets.filter((asset) => asset.id !== id),
+                            assetsMap: newAssetsMap,
+                        };
+                    });
                     return true;
-                } catch (error) {
-                    console.error("Save failed:", error);
-                    return false;
-                }
-            },
+                },
 
-            updateAsset: async (id, data) => {
-                try {
-                    const updatedAsset = await mockUpdateAssetAPI(id, data);
-                    set((state) => ({
-                        assets: state.assets.map((a) => (a.id === id ? updatedAsset : a)),
-                    }));
-                    return true;
-                } catch (error) {
-                    console.error("Update failed:", error);
-                    return false;
-                }
-            },
+                loadAssets: async () => {
+                    const stored = zustandStorage.getItem("assets");
+                    if (stored) {
+                        const parsedAssets = JSON.parse(stored);
+                        const assetsMap = parsedAssets.reduce(
+                            (map: Record<string, Asset>, asset: Asset) => {
+                                if (asset?.id) map[asset.id] = asset;
+                                return map;
+                            },
+                            {}
+                        );
+                        set({ assets: parsedAssets, assetsMap });
+                    }
+                },
 
-            deleteAsset: async (id) => {
-                set((state) => ({ assets: state.assets.filter((a) => a.id !== id) }));
-                return true;
-            },
+                getAssetById: (id) => {
+                    if (!id) return undefined;
+                    return get().assetsMap[id];
+                },
 
-            loadAssets: async () => {
-                const stored = zustandStorage.getItem("assets");
-                console.log("Loading assets from storage:", stored);
-                if (stored) set({ assets: JSON.parse(stored) });
-            },
+                getAssetsByLocation: () => {
+                    const propertyId = getCurrentPropertyId();
+                    const propertyAssets = get().assets.filter((a) => a.propertyId === propertyId);
+                    const grouped = _.groupBy(
+                        propertyAssets,
+                        (asset) => asset.location || "Unspecified Location"
+                    );
 
-            // Utilities
-            getAssetById: (id) => get().assets.find((a) => a.id === id),
+                    return Object.entries(grouped).reduce((acc, [location, assets]) => {
+                        acc[location] = {
+                            assets,
+                            count: assets.length,
+                            label: location,
+                        };
+                        return acc;
+                    }, {} as CategorizedAssets);
+                },
 
-            getAssetsByLocation: (options?: AssetsByLocationOptions): CategorizedAssets => {
-                const assets = get().assets;
-                const grouped = _.groupBy(
-                    assets,
-                    (asset) => asset.location || "Unspecified Location"
-                );
-
-                return Object.entries(grouped).reduce((acc, [location, locationAssets]) => {
-                    if (options?.onlyNonEmpty && locationAssets.length === 0) return acc;
-
-                    acc[location] = {
-                        assets: locationAssets,
-                        count: locationAssets.length,
-                        label: location, // Raw location as label
-                    };
-                    return acc;
-                }, {} as CategorizedAssets);
-            },
-        }),
+                getAssetsForCurrentProperty: () => {
+                    const propertyId = getCurrentPropertyId();
+                    return get().assets.filter((a) => a.propertyId === propertyId);
+                },
+            };
+        },
         {
             name: "asset-storage",
             storage: createJSONStorage(() => zustandStorage),
             onRehydrateStorage: () => (state) => {
-                state!.isHydrated = true;
+                if (state) {
+                    state.isHydrated = true;
+                    if (state.assets && _.isEmpty(state.assetsMap)) {
+                        state.assetsMap = _.keyBy(state.assets, "id");
+                    }
+                }
             },
         }
     )

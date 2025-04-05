@@ -1,4 +1,4 @@
-export default [
+const assetCategories: { label: string; value: string }[] = [
     {
         label: "Fridge",
         value: "fridge",
@@ -67,4 +67,6 @@ export default [
         label: "Others",
         value: "others",
     },
-];
+] as const;
+
+export default assetCategories;
