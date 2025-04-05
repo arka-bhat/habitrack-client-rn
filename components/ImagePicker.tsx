@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Pressable, Image, FlatList } from "react-native";
-import * as ExpoImagePicker from "expo-image-picker";
+import { launchImageLibraryAsync, ImagePickerAsset } from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 
 import useColorMode from "@/hooks/useColorMode";
@@ -9,13 +9,13 @@ import { textColors } from "@/constants/TailwindClassNameConstants";
 
 interface ImagePickerProps {
     children: React.ReactNode;
-    image?: string;
-    onImageSelect: (value: string) => void;
+    image?: ImagePickerAsset;
+    onImageSelect: (value: ImagePickerAsset) => void;
 }
 
 const ImagePicker: React.FC<ImagePickerProps> = ({ children, image, onImageSelect }) => {
     const pickImage = async () => {
-        const result = await ExpoImagePicker.launchImageLibraryAsync({
+        const result = await launchImageLibraryAsync({
             mediaTypes: ["images"],
             allowsEditing: true,
             aspect: [4, 3],
@@ -23,22 +23,22 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ children, image, onImageSelec
         });
 
         if (!result.canceled) {
-            onImageSelect(result.assets[0].uri);
+            onImageSelect(result.assets[0]);
         }
     };
 
     return (
         <>
             <Pressable onPress={pickImage}>{children}</Pressable>
-            {image && <Image source={{ uri: image }} className='w-24 h-24 mt-2' />}
+            {image && <Image source={{ uri: image.uri }} className='w-24 h-24 mt-2' />}
         </>
     );
 };
 
 interface ImagePickerMultipleProps {
     children: React.ReactNode;
-    images: string[];
-    onImageSelect: (value: string[]) => void;
+    images: ImagePickerAsset[];
+    onImageSelect: (value: ImagePickerAsset[]) => void;
 }
 
 export const ImagePickerMultiple: React.FC<ImagePickerMultipleProps> = ({
@@ -49,14 +49,14 @@ export const ImagePickerMultiple: React.FC<ImagePickerMultipleProps> = ({
     const { colorMode } = useColorMode();
 
     const pickImage = async () => {
-        let result = await ExpoImagePicker.launchImageLibraryAsync({
+        let result = await launchImageLibraryAsync({
             mediaTypes: ["images"],
             allowsMultipleSelection: true,
             quality: 1,
         });
 
         if (!result.canceled) {
-            const newImages = result.assets.map((asset) => asset.uri);
+            const newImages = result.assets.map((asset) => asset);
             const uniqueImages = [...new Set([...images, ...newImages])];
             onImageSelect(uniqueImages);
         }
@@ -81,7 +81,10 @@ export const ImagePickerMultiple: React.FC<ImagePickerMultipleProps> = ({
                         contentContainerStyle={{ alignItems: "flex-start" }}
                         renderItem={({ item, index }) => (
                             <View className='mr-2'>
-                                <Image source={{ uri: item }} className='w-36 h-36 rounded-lg' />
+                                <Image
+                                    source={{ uri: item.uri }}
+                                    className='w-36 h-36 rounded-lg'
+                                />
                                 <Pressable
                                     className='absolute top-1 right-1 bg-dark-secondary-800 p-1 rounded-full'
                                     onPress={() => removeImage(index)}
