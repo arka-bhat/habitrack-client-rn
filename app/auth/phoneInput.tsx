@@ -25,11 +25,13 @@ import I18nText from "@/components/i18nText";
 import useColorMode from "@/hooks/useColorMode";
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
+import { useAuthStore } from "@/store/AuthStore";
 
 const PhoneNumberScreen = () => {
     const inputRef = useRef(null);
 
     const { colorMode } = useColorMode();
+    const { setOtpPhoneNumber } = useAuthStore();
 
     const [countryCode, setCountryCode] = useState("+91");
     const [countryCodeISO, setCountryCodeISO] = useState<CountryCode>("IN");
@@ -111,10 +113,11 @@ const PhoneNumberScreen = () => {
     };
 
     const handleSendOTP = (): void => {
-        if (!isPhoneNumberValid()) {
-            alert("Phone number is Invalid");
-        } else {
+        if (isPhoneNumberValid()) {
+            setOtpPhoneNumber(countryCode, formattedNumber);
             router.navigate("/auth/otpInput");
+        } else {
+            alert("Phone number is Invalid");
         }
     };
 
@@ -183,18 +186,6 @@ const PhoneNumberScreen = () => {
                                     className='text-white font-base-medium'
                                 />
                             </Pressable>
-
-                            {/* Create Account Link */}
-                            <View className='flex-row mt-2'>
-                                <Text className={mergeClassNames("mr-2", textColors)}>
-                                    Don't have an account?
-                                </Text>
-                                <Pressable>
-                                    <Text className='text-light-primary-400 dark:text-dark-primary-400 font-base-medium'>
-                                        Create Account
-                                    </Text>
-                                </Pressable>
-                            </View>
                         </View>
                     </KeyboardAwareScrollView>
                 </KeyboardProvider>

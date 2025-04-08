@@ -6,6 +6,9 @@ import SettingsCategory, { SettingsOptionItem } from "@/components/Settings";
 import { colors, mergeClassNames } from "@/utils/TailwindUtils";
 import useColorMode from "@/hooks/useColorMode";
 import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
+import { useUserStore } from "@/store/UserStore";
+import { useAuthStore } from "@/store/AuthStore";
+import { router } from "expo-router";
 
 interface MenuCategory {
     title: string;
@@ -13,6 +16,7 @@ interface MenuCategory {
 }
 
 const ProfileCard = ({ user }: { user?: any }) => {
+    const { profile } = useUserStore();
     return (
         <View className='rounded-2xl py-4 relative overflow-hidden'>
             {/* Background Design with App Icon */}
@@ -23,18 +27,22 @@ const ProfileCard = ({ user }: { user?: any }) => {
             {/* User Profile Section */}
             <View className='flex-row items-center gap-4 pb-4'>
                 <Image
-                    source={{ uri: user.profileImage }}
+                    source={{
+                        uri:
+                            profile?.image ??
+                            require("../../assets/images/default-profile-picture.jpg"),
+                    }}
                     className='w-24 h-24 rounded-full border-2 border-light-primary-400 dark:border-dark-primary-400'
                 />
                 <View>
                     <Text className={mergeClassNames("font-base-bold text-2xl", textColors)}>
-                        {user.name}
+                        {profile?.name ?? "Guest User"}
                     </Text>
                     <Text className={mergeClassNames("text-lg font-base-regular", textColors)}>
-                        {user.email}
+                        {profile?.email ?? "Guest Email"}
                     </Text>
                     <Text className='text-basee font-base-medium text-light-primary-400 dark:text-dark-primary-400 mt-1'>
-                        {user.plan}
+                        {profile?.plan === "premium" ? "Premium Plan" : "Free Plan"}
                     </Text>
                 </View>
             </View>
@@ -47,67 +55,97 @@ const Profile = () => {
 
     const menuData: MenuCategory[] = [
         {
-            title: "Orders",
+            title: "Property Management",
             options: [
                 {
-                    icon: "bag-outline",
-                    label: "Your orders",
-                    onPress: () => {},
+                    icon: "home-outline",
+                    label: "View Your Properties",
+                    onPress: () => router.push("/properties"),
                 },
                 {
-                    icon: "heart-outline",
-                    label: "Favorite orders",
-                    onPress: () => {},
+                    icon: "add-circle-outline",
+                    label: "Add New Property",
+                    onPress: () => router.push("/properties/add"),
+                },
+                {
+                    icon: "swap-horizontal-outline",
+                    label: "Transfer Property",
+                    onPress: () => router.push("/properties/transfer"),
                 },
             ],
         },
         {
-            title: "Payment",
-            options: [
-                {
-                    icon: "card-outline",
-                    label: "Saved cards",
-                    onPress: () => {},
-                },
-                {
-                    icon: "receipt-outline",
-                    label: "Payment history",
-                    onPress: () => {},
-                },
-                {
-                    icon: "cash-outline",
-                    label: "Refund status",
-                    onPress: () => {},
-                },
-            ],
-        },
-        {
-            title: "Account",
+            title: "Account Settings",
             options: [
                 {
                     icon: "person-outline",
-                    label: "Edit profile",
-                    onPress: () => {},
+                    label: "Edit Profile",
+                    onPress: () => router.push("/profile/edit"),
+                },
+                {
+                    icon: "settings-outline",
+                    label: "App Settings",
+                    onPress: () => router.push("/settings"),
                 },
                 {
                     icon: "shield-checkmark-outline",
-                    label: "Privacy settings",
-                    onPress: () => {},
+                    label: "Security",
+                    onPress: () => router.push("/security"),
+                },
+            ],
+        },
+        {
+            title: "Support & Legal",
+            options: [
+                {
+                    icon: "help-circle-outline",
+                    label: "Help Center",
+                    onPress: () => router.push("/support"),
+                },
+                {
+                    icon: "chatbox-ellipses-outline",
+                    label: "Send Feedback",
+                    onPress: () => router.push("/feedback"),
+                },
+                {
+                    icon: "document-text-outline",
+                    label: "Legal Information",
+                    onPress: () => router.push("/legal"),
+                },
+            ],
+        },
+        {
+            title: "Session",
+            options: [
+                {
+                    icon: "log-out-outline",
+                    label: "Log Out",
+                    onPress: () => {
+                        Alert.alert("Log Out", "Are you sure you want to log out?", [
+                            { text: "Cancel", style: "cancel" },
+                            {
+                                text: "Log Out",
+                                style: "destructive",
+                                onPress: () => useAuthStore.getState().clearToken(),
+                            },
+                        ]);
+                    },
                 },
                 {
                     icon: "trash-outline",
-                    label: "Delete account",
+                    label: "Delete Account",
                     onPress: () => {
                         Alert.alert(
                             "Delete Account",
-                            "Are you sure you want to delete your account?\nThis action cannot be undone.",
+                            "This will permanently remove all your data",
                             [
                                 { text: "Cancel", style: "cancel" },
                                 {
                                     text: "Delete",
                                     style: "destructive",
                                     onPress: () => {
-                                        console.log("Delete account");
+                                        useAuthStore.getState().clearToken();
+                                        useUserStore.getState().clearProfile();
                                     },
                                 },
                             ]

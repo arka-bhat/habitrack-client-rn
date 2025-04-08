@@ -55,7 +55,7 @@ export const BasePropertySchema = z.object({
     /** Required field with validation */
     state: z.string().min(1, "State is required"),
     /** Required field with validation */
-    zip: z.string().min(1, "ZIP code is required"),
+    postalCode: z.string().min(1, "Postal code is required"),
     /** Required field with validation */
     country: z.string().min(1, "Country is required"),
     /** Optional GPS coordinates */

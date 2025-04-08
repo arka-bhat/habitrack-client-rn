@@ -1,4 +1,4 @@
-import { AssetDB, AssetInput } from "@/types/asset";
+import type { AssetDB, AssetInput } from "@/types/asset";
 
 export const mockCreateAssetAPI = async (
     propertyId: string,

@@ -1,5 +1,5 @@
 import { Text, TextProps } from "react-native";
-import i18n from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface I18nTextProps extends TextProps {
     translationKey: string;
@@ -7,8 +7,9 @@ interface I18nTextProps extends TextProps {
 
 const I18nText: React.FC<I18nTextProps> = (props) => {
     const { translationKey, ...textProps } = props;
+    const { t } = useTranslation();
 
-    return <Text {...textProps}>{i18n.t(translationKey)}</Text>;
+    return <Text {...textProps}>{t(translationKey)}</Text>;
 };
 
 export default I18nText;

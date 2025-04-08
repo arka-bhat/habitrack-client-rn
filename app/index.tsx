@@ -6,16 +6,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { colorScheme, useColorScheme } from "nativewind";
 
-import i18nConfig from "@/i18n";
+import { LangCode, initalizeI18Next } from "@/i18n";
 import { mergeClassNames } from "@/utils/TailwindUtils";
 import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 import i18next from "i18next";
+import { useAuthStore } from "@/store/AuthStore";
+import { useUserStore } from "@/store/UserStore";
 
 const theme = process.env.COLOR_THEME as "light" | "dark" | "system" | undefined;
 colorScheme.set(theme || "system");
 
 // Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync().catch(console.warn);
 
 // Set the animation options. This is optional.
 SplashScreen.setOptions({
@@ -25,28 +27,59 @@ SplashScreen.setOptions({
 
 const Main = () => {
     const [appIsReady, setAppIsReady] = useState(false);
+    const [i18nReady, setI18nReady] = useState(false);
     const { colorScheme, toggleColorScheme } = useColorScheme();
-
-    const initI18N = () => {
-        i18nConfig.initalizeI18Next();
-    };
-
-    const viewLogin = false;
+    const { hydrate, userLanguage } = useUserStore();
 
     useEffect(() => {
         async function prepare() {
             try {
                 // Pre-load fonts, make any API calls you need to do here
-                await Font.loadAsync({
-                    "SpaceGrotesk-Bold": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.ttf"),
-                    "SpaceGrotesk-Light": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-Light.ttf"),
-                    "SpaceGrotesk-Medium": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.ttf"),
-                    "SpaceGrotesk-Regular": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf"),
-                    "SpaceGrotesk-SemiBold": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.ttf"),
-                });
+                await Promise.all([
+                    Font.loadAsync({
+                        "SpaceGrotesk-Bold": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.ttf"),
+                        "SpaceGrotesk-Light": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-Light.ttf"),
+                        "SpaceGrotesk-Medium": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.ttf"),
+                        "SpaceGrotesk-Regular": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf"),
+                        "SpaceGrotesk-SemiBold": require("../assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.ttf"),
+                    }),
+                    useAuthStore.persist.rehydrate(),
+                    useUserStore.persist.rehydrate(),
+                ]);
 
-                initI18N();
-                i18next.changeLanguage("en");
+                // await hydrateUser();
+                // await hydrateAuth();
+
+                // Add a small delay to ensure the hydration is processed
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
+                // Now initialize i18n with whatever language we've got
+                const currentLang = useUserStore.getState().userLanguage || LangCode.en;
+                await initalizeI18Next(currentLang);
+                setI18nReady(true);
+
+                const { token, isHydrated } = useAuthStore.getState();
+                const { onboarding } = useUserStore.getState();
+
+                setTimeout(() => {
+                    if (token) {
+                        router.replace("/home");
+                    } else {
+                        switch (onboarding.stage) {
+                            case "user_registration":
+                                router.replace("/auth/onboarding/userRegistration");
+                                break;
+                            case "property_registration":
+                                router.replace("/auth/onboarding/propertyRegistration");
+                                break;
+                            case "complete":
+                                router.replace("/home");
+                                break;
+                            default:
+                                router.replace("/auth/phoneInput");
+                        }
+                    }
+                }, 1000);
             } catch (e) {
                 console.warn(e);
             } finally {
@@ -59,16 +92,29 @@ const Main = () => {
     }, []);
 
     useEffect(() => {
-        if (appIsReady) {
-            setTimeout(() => {
-                if (viewLogin) {
-                    router.replace("/auth/phoneInput");
-                } else {
-                    router.replace("/home");
-                }
-            }, 1000);
+        if (appIsReady && i18nReady) {
+            console.log("Language ", userLanguage);
+            //     setTimeout(() => {
+            //         if (token) {
+            //             router.replace("/home");
+            //         } else {
+            //             switch (onboarding.stage) {
+            //                 case "user_registration":
+            //                     router.replace("/auth/onboarding/userRegistration");
+            //                     break;
+            //                 case "property_registration":
+            //                     router.replace("/auth/onboarding/propertyRegistration");
+            //                     break;
+            //                 case "complete":
+            //                     router.replace("/home");
+            //                     break;
+            //                 default:
+            //                     router.replace("/auth/phoneInput");
+            //             }
+            //         }
+            //     }, 1000);
         }
-    }, [appIsReady]);
+    }, [appIsReady, i18nReady]);
 
     const onLayoutRootView = useCallback(async () => {
         if (appIsReady) {
@@ -89,7 +135,6 @@ const Main = () => {
                 <ActivityIndicator size='large' color='#000' />
             </SafeAreaView>
         );
-        return null;
     }
 
     return (
@@ -104,7 +149,7 @@ const Main = () => {
 
             <Pressable onPress={toggleColorScheme}>
                 <Text className={mergeClassNames("text-lg font-base-bold", textColors)}>
-                    Current theme: {colorScheme}
+                    Current theme: {colorScheme} Current lang: {userLanguage}
                 </Text>
             </Pressable>
         </SafeAreaView>
