@@ -15,14 +15,14 @@ interface HeaderProps {
     onIconPress?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({
+const Header = ({
     children,
     iconName,
     iconPosition = "right",
     iconColor,
     iconSize,
     onIconPress,
-}) => {
+}: HeaderProps) => {
     const { colorMode } = useColorMode();
 
     return (

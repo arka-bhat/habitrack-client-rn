@@ -14,11 +14,7 @@ interface ExpandableSectionProps {
     children: React.ReactNode;
 }
 
-const ExpandableSection: React.FC<ExpandableSectionProps> = ({
-    title,
-    titleTextClassName,
-    children,
-}) => {
+const ExpandableSection = ({ title, titleTextClassName, children }: ExpandableSectionProps) => {
     const { colorMode } = useColorMode();
 
     const [expanded, setExpanded] = useState(false);

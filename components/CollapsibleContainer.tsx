@@ -7,7 +7,7 @@ interface CollapsibleContainerProps {
     expanded: boolean;
 }
 
-const CollapsibleContainer: React.FC<CollapsibleContainerProps> = ({ children, expanded }) => {
+const CollapsibleContainer = ({ children, expanded }: CollapsibleContainerProps) => {
     const [height, setHeight] = useState(0);
     const animatedHeight = useSharedValue(0);
 

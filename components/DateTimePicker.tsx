@@ -10,10 +10,7 @@ interface DateTimePickerProps {
     onChange: (date: Date) => void;
 }
 
-const AndroidDateTimePicker: React.FC<DateTimePickerProps> = ({
-    currentDate,
-    onChange,
-}: DateTimePickerProps) => {
+const AndroidDateTimePicker = ({ currentDate, onChange }: DateTimePickerProps) => {
     const showDateTimePicker = () => {
         DateTimePickerAndroid.open({
             value: currentDate,
@@ -43,10 +40,7 @@ const AndroidDateTimePicker: React.FC<DateTimePickerProps> = ({
     );
 };
 
-const IOSDateTimePicker: React.FC<DateTimePickerProps> = ({
-    currentDate,
-    onChange,
-}: DateTimePickerProps) => {
+const IOSDateTimePicker = ({ currentDate, onChange }: DateTimePickerProps) => {
     return (
         <View>
             <RNDateTimePicker
@@ -62,7 +56,7 @@ const IOSDateTimePicker: React.FC<DateTimePickerProps> = ({
     );
 };
 
-const DateTimePicker: React.FC<DateTimePickerProps> = (props: DateTimePickerProps) => {
+const DateTimePicker = (props: DateTimePickerProps) => {
     if (Platform.OS === "android") {
         return <AndroidDateTimePicker {...props} />;
     }
@@ -73,41 +67,3 @@ const DateTimePicker: React.FC<DateTimePickerProps> = (props: DateTimePickerProp
 };
 
 export default DateTimePicker;
-
-//old
-{
-    /* <TextInput
-        placeholder='Install Date'
-        value={
-            formData.installDate
-                ? new Date(formData.installDate).toDateString()
-                : ""
-        }
-        editable={false}
-        onPressIn={() => setShowInstallDatePicker(true)}
-        className={mergeClassNames(
-            "flex-1 px-3 pt-2 rounded-md h-14 tracking-wide text-xl font-base-semibold border leading-tight",
-            textColors,
-            placeholderColors
-        )}
-        placeholderTextColor={colors[colorMode].secondary[600]}
-    />
-
-    {showInstallDatePicker && (
-        <DateTimePicker
-            className='flex-1 px-3 pt-2 rounded-md h-14 tracking-wide text-xl font-base-semibold border leading-tight'
-            value={
-                formData.installDate
-                    ? new Date(formData.installDate)
-                    : new Date()
-            }
-            mode='date'
-            display='spinner'
-            maximumDate={new Date()}
-            onChange={(event, date) => {
-                setShowInstallDatePicker(false);
-                if (date) handleDateChange("installDate", date);
-            }}
-        />
-    )} */
-}

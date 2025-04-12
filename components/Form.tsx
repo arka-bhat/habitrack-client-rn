@@ -43,7 +43,7 @@ interface FormProps {
     error?: boolean;
 }
 
-const Form: React.FC<FormProps> = ({ config, value, onChange, error, errorMessage }) => {
+const Form = ({ config, value, onChange, error, errorMessage }: FormProps) => {
     const { colorMode } = useColorMode();
     const { key, placeholder, label, inputType, required, options, dropdownHeight } = config;
 

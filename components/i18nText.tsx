@@ -5,8 +5,7 @@ interface I18nTextProps extends TextProps {
     translationKey: string;
 }
 
-const I18nText: React.FC<I18nTextProps> = (props) => {
-    const { translationKey, ...textProps } = props;
+const I18nText = ({ translationKey, ...textProps }: I18nTextProps) => {
     const { t } = useTranslation();
 
     return <Text {...textProps}>{t(translationKey)}</Text>;

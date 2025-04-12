@@ -13,7 +13,7 @@ interface ImagePickerProps {
     onImageSelect: (value: ImagePickerAsset) => void;
 }
 
-const ImagePicker: React.FC<ImagePickerProps> = ({ children, image, onImageSelect }) => {
+const ImagePicker = ({ children, image, onImageSelect }: ImagePickerProps) => {
     const pickImage = async () => {
         const result = await launchImageLibraryAsync({
             mediaTypes: ["images"],
@@ -41,11 +41,11 @@ interface ImagePickerMultipleProps {
     onImageSelect: (value: ImagePickerAsset[]) => void;
 }
 
-export const ImagePickerMultiple: React.FC<ImagePickerMultipleProps> = ({
+export const ImagePickerMultiple = ({
     children,
     images,
     onImageSelect,
-}) => {
+}: ImagePickerMultipleProps) => {
     const { colorMode } = useColorMode();
 
     const pickImage = async () => {

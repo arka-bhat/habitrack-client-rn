@@ -25,11 +25,11 @@ interface CountryCodePickerProps {
     setSelectedISO: (iso: CountryCode) => void;
 }
 
-const CountryCodePicker: React.FC<CountryCodePickerProps> = ({
+const CountryCodePicker = ({
     selectedCode = "+1",
     setSelectedCode,
     setSelectedISO,
-}) => {
+}: CountryCodePickerProps) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [currentCode, setCurrentCode] = useState(selectedCode);
 

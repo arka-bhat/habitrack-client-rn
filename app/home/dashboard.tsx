@@ -81,57 +81,11 @@ const NoContent = () => {
     );
 };
 
-// const DashboardContent = () => {
-//     // Example FAQ data
-//     const faqData = [
-//         {
-//             title: "How to place an order",
-//             content:
-//                 "To place an order, simply browse our products, add items to your cart, and proceed to checkout. You can pay using various payment methods including credit cards and digital wallets.",
-//         },
-//         {
-//             title: "Shipping and delivery",
-//             content:
-//                 "We typically process orders within 1-2 business days. Standard shipping takes 3-5 business days, while express shipping delivers your items within 1-2 business days. You can track your package using the tracking number provided in your order confirmation email.",
-//         },
-//         {
-//             title: "Returns and refunds",
-//             content:
-//                 "If you're not satisfied with your purchase, you can return it within 30 days for a full refund. Items must be in their original condition and packaging. Once we receive your return, we'll process your refund within 5-7 business days.",
-//         },
-//     ];
-
-//     return (
-//         <ScrollView className='flex-1 py-4' showsVerticalScrollIndicator={false}>
-//             <Text className={mergeClassNames("`text-2xl font-base-bold mb-6", textColors)}>
-//                 Frequently Asked Questions
-//             </Text>
-
-//             {faqData.map((item, index) => (
-//                 <ExpandableSection
-//                     key={`faq-${index}`}
-//                     title={item.title}
-//                     titleTextClassName={mergeClassNames("text-base font-base-medium", textColors)}
-//                 >
-//                     <Text
-//                         className={mergeClassNames(
-//                             "text-base font-base-regular leading-6 py-4",
-//                             textColors
-//                         )}
-//                     >
-//                         {item.content}
-//                     </Text>
-//                 </ExpandableSection>
-//             ))}
-//         </ScrollView>
-//     );
-// };
-
 interface DashboardContentProps {
     categorizedAssets: CategorizedAssets;
 }
 
-const DashboardContent: React.FC<DashboardContentProps> = ({ categorizedAssets }) => {
+const DashboardContent = ({ categorizedAssets }: DashboardContentProps) => {
     return (
         <ScrollView className='py-4' showsVerticalScrollIndicator={false}>
             {Object.entries(categorizedAssets).map(([categoryKey, { assets, count, label }]) => (
@@ -213,7 +167,7 @@ const Dashboard = () => {
     const { assets, getAssetsByLocation } = useAssetStore();
 
     const categorizedAssets = useMemo(() => {
-        return getAssetsByLocation({ onlyNonEmpty: true });
+        return getAssetsByLocation();
     }, [assets]);
 
     return (

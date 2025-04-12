@@ -10,14 +10,14 @@ interface OTPInputProps {
     inputClassName?: string;
 }
 
-const OTPInput: React.FC<OTPInputProps> = ({
+const OTPInput = ({
     length = 6,
     onCodeFilled = (code: string) => {},
     autoFocus = true,
     keyboardType = "number-pad",
     containerClassName,
     inputClassName,
-}) => {
+}: OTPInputProps) => {
     const [code, setCode] = useState(Array(length).fill(""));
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const inputRefs = useRef<TextInput[]>([]);

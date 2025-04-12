@@ -38,12 +38,7 @@ interface SettingsCategoryProps {
 }
 
 // Main component for a settings category
-const SettingsCategory: React.FC<SettingsCategoryProps> = ({
-    title,
-    options,
-    colorMode,
-    colors,
-}) => {
+const SettingsCategory = ({ title, options, colorMode, colors }: SettingsCategoryProps) => {
     return (
         <View className='rounded-md pt-4 mb-3'>
             {/* Category Title */}
@@ -72,14 +67,14 @@ const SettingsCategory: React.FC<SettingsCategoryProps> = ({
 };
 
 // Individual setting option component
-const SettingsOption: React.FC<SettingsOptionProps> = ({
+const SettingsOption = ({
     icon,
     label,
     onPress,
     textColors,
     colorMode,
     colors,
-}) => {
+}: SettingsOptionProps) => {
     return (
         <Pressable className='pt-3 pb-2 flex-row justify-between items-center' onPress={onPress}>
             <View className='flex-row items-center gap-3'>

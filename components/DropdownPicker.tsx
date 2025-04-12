@@ -42,7 +42,7 @@ interface DropdownProps {
     backdropClassName?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({
+const Dropdown = ({
     options,
     onSelect,
     minHeight = 150,
@@ -61,7 +61,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     optionContainerClassName = "",
     optionClassName = "",
     backdropClassName = "",
-}) => {
+}: DropdownProps) => {
     const screenWidth = Dimensions.get("window").width;
     const triggerRef = useRef<View>(null);
 

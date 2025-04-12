@@ -5,8 +5,7 @@ interface I18NTextInputProps extends TextInputProps {
     placeholderTranslationKey: string;
 }
 
-const I18NTextInput: React.FC<I18NTextInputProps> = (props) => {
-    const { placeholderTranslationKey, ...textInputProps } = props;
+const I18NTextInput = ({ placeholderTranslationKey, ...textInputProps }: I18NTextInputProps) => {
     const { t } = useTranslation(); // Get translation function
 
     return (
