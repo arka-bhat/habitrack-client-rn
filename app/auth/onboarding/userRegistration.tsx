@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-import FormField, { FormFieldsProps } from "@/components/Form";
-import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
-import { mergeClassNames } from "@/utils/TailwindUtils";
 import {
     KeyboardAwareScrollView,
     KeyboardProvider,
     KeyboardToolbar,
 } from "react-native-keyboard-controller";
 import { router } from "expo-router";
-import Header from "@/components/Header";
-import { isUserFieldKey, UserInput, validateUser } from "@/types/user";
+
 import { useUserStore } from "@/store/UserStore";
 import { useAuthStore } from "@/store/AuthStore";
+import { isUserFieldKey, UserInput, validateUser } from "@/types/user";
+import Header from "@/components/Header";
+import FormField, { FormFieldsProps } from "@/components/Form";
+import { mergeClassNames } from "@/utils/TailwindUtils";
+import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 
 const UserResigtration = () => {
     const { createProfile, setOnboardingStage, saveTempOnboardingData } = useUserStore();
@@ -27,7 +27,7 @@ const UserResigtration = () => {
         phoneNumber: undefined,
     });
 
-    const formFields = [
+    const formFields: FormFieldsProps[] = [
         {
             key: "name",
             label: "Your Name",
@@ -40,7 +40,7 @@ const UserResigtration = () => {
             inputType: "email",
             required: false,
         },
-    ] as const;
+    ];
 
     useEffect(() => {
         setOnboardingStage("user_registration");
@@ -118,7 +118,7 @@ const UserResigtration = () => {
                         <FormField
                             key={field.key}
                             config={field}
-                            value={formData[field.key] ?? ""}
+                            value={formData[field.key as keyof UserInput] ?? ""}
                             onChange={handleInputChange}
                             error={!!errors[field.key]}
                             errorMessage={errors[field.key] ?? ""}

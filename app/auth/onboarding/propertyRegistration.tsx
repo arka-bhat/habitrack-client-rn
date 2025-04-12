@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Pressable, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-import FormField, { FormFieldsProps } from "@/components/Form";
-import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
-import { mergeClassNames } from "@/utils/TailwindUtils";
 import {
     KeyboardAwareScrollView,
     KeyboardProvider,
     KeyboardToolbar,
 } from "react-native-keyboard-controller";
-import Header from "@/components/Header";
-import { resetAndNavigate } from "@/utils/NavigationHelpers";
-import { PropertyInput, validateProperty } from "@/types/property";
+
 import { usePropertyStore } from "@/store/PropertyStore";
 import { useUserStore } from "@/store/UserStore";
+import Header from "@/components/Header";
+import FormField, { FormFieldsProps } from "@/components/Form";
+import { PropertyInput, validateProperty } from "@/types/property";
+import { mergeClassNames } from "@/utils/TailwindUtils";
+import { resetAndNavigate } from "@/utils/NavigationHelpers";
+import { backgroundColors, textColors } from "@/constants/TailwindClassNameConstants";
 
 const PropertyResigtration = () => {
     const formFields: FormFieldsProps[] = [
