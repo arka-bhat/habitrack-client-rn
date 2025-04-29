@@ -13,7 +13,7 @@ export const ASSET_FIELDS = {
     serialNumber: "serialNumber",
     displayName: "displayName",
     category: "category",
-    location: "location",
+    room: "room",
     images: "images",
     size: "size",
     manufactureDate: "manufactureDate",
@@ -61,8 +61,8 @@ export const BaseAssetSchema = z.object({
     displayName: z.string().optional(),
     /** Optional category */
     category: z.enum([...assetCategoryValues] as [string, ...string[]]),
-    /** Optional location */
-    location: z.string().min(1, "Location is required"),
+    /** Optional room */
+    room: z.string().min(1, "Room is required"),
     /** Optional size */
     size: z.string().optional(),
     /** Optional manufacture date */

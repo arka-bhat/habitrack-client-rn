@@ -72,11 +72,11 @@ type AssetStore = {
     getAssetById: (id: string | null | undefined) => Asset | undefined;
 
     /**
-     * Gets assets grouped by location for the current property
-     * @returns {CategorizedAssets} Assets grouped by location
+     * Gets assets grouped by rooms for the current property
+     * @returns {CategorizedAssets} Assets grouped by rooms
      * @throws {Error} When no current property is set
      */
-    getAssetsByLocation: () => CategorizedAssets;
+    getAssetsByRooms: () => CategorizedAssets;
 
     /**
      * Gets all assets belonging to the current property
@@ -172,19 +172,19 @@ export const useAssetStore = create<AssetStore>()(
                     return get().assetsMap[id];
                 },
 
-                getAssetsByLocation: () => {
+                getAssetsByRooms: () => {
                     const propertyId = getCurrentPropertyId();
                     const propertyAssets = get().assets.filter((a) => a.propertyId === propertyId);
                     const grouped = _.groupBy(
                         propertyAssets,
-                        (asset) => asset.location || "Unspecified Location"
+                        (asset) => asset.room || "Unspecified Room"
                     );
 
-                    return Object.entries(grouped).reduce((acc, [location, assets]) => {
-                        acc[location] = {
+                    return Object.entries(grouped).reduce((acc, [room, assets]) => {
+                        acc[room] = {
                             assets,
                             count: assets.length,
-                            label: location,
+                            label: room,
                         };
                         return acc;
                     }, {} as CategorizedAssets);

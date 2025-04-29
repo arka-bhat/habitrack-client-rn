@@ -132,7 +132,7 @@ const DashboardContent = ({ categorizedAssets }: DashboardContentProps) => {
                                     >
                                         {asset.displayName || asset.name}
                                     </Text>
-                                    {asset.location && (
+                                    {asset.room && (
                                         <Text
                                             className={mergeClassNames(
                                                 "text-xs font-base-regular mt-1",
@@ -140,7 +140,7 @@ const DashboardContent = ({ categorizedAssets }: DashboardContentProps) => {
                                             )}
                                             numberOfLines={1}
                                         >
-                                            {asset.location}
+                                            {asset.room}
                                         </Text>
                                     )}
                                 </View>
@@ -164,10 +164,10 @@ const DashboardContent = ({ categorizedAssets }: DashboardContentProps) => {
 
 const Dashboard = () => {
     const { colorMode } = useColorMode();
-    const { assets, getAssetsByLocation } = useAssetStore();
+    const { assets, getAssetsByRooms } = useAssetStore();
 
     const categorizedAssets = useMemo(() => {
-        return getAssetsByLocation();
+        return getAssetsByRooms();
     }, [assets]);
 
     return (
